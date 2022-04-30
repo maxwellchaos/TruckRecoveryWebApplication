@@ -24,6 +24,7 @@ namespace WebServiceTruckRecovery.Models
         
         [Required]
         [Display(Name = "Права")]
+        public int RoleId { get; set; }
         public Role Role { get; set; }
 
     }

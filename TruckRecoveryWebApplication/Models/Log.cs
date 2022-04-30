@@ -30,6 +30,7 @@ namespace TruckRecoveryWebApplication.Models
         /// <summary>
         /// ссылка на объект заказа, в котором произошло событие
         /// </summary>
+        public int OrderId { get; set; }
         public Order Order { get; set; }
     }
 }

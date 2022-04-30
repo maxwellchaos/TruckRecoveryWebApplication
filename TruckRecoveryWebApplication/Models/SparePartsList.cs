@@ -39,6 +39,8 @@ namespace WebServiceTruckRecovery.Models
         [Display(Name = "Дата доставки")]
         public DateTime DeliveryDate { get; set; }
 
+
+        public int OrderId { get; set; }
         public Order Order { get; set; }
 
     }
