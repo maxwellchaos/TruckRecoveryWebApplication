@@ -11,23 +11,22 @@ using WebServiceTruckRecovery.Models;
 
 namespace TruckRecoveryWebApplication.Controllers
 {
-    public class OrdersController : Controller
+    public class SparePartsController : Controller
     {
         private readonly Context _context;
 
-        public OrdersController(Context context)
+        public SparePartsController(Context context)
         {
             _context = context;
         }
 
-        // GET: Orders
+        // GET: SpareParts
         public async Task<IActionResult> Index()
         {
-            var context = _context.Orders.Include(o => o.Client).Include(o => o.Status);
-            return View(await context.ToListAsync());
+            return View(await _context.SparePart.ToListAsync());
         }
 
-        // GET: Orders/Details/5
+        // GET: SpareParts/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -35,48 +34,39 @@ namespace TruckRecoveryWebApplication.Controllers
                 return NotFound();
             }
 
-            var order = await _context.Orders
-                .Include(o => o.Client)
-                .Include(o => o.Status)
+            var sparePart = await _context.SparePart
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (order == null)
+            if (sparePart == null)
             {
                 return NotFound();
             }
 
-            return View(order);
+            return View(sparePart);
         }
 
-        // GET: Orders/Create
+        // GET: SpareParts/Create
         public IActionResult Create()
         {
-            ViewData["ClientId"] = new SelectList(_context.Client, "Id", "Name");
-            ViewData["StatusId"] = new SelectList(_context.OrderStatus, "Id", "Status");
             return View();
         }
 
-        // POST: Orders/Create
+        // POST: SpareParts/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,ClientId,OrderNumber,TruckList")] Order order)
+        public async Task<IActionResult> Create([Bind("Id,Name,Price")] SparePart sparePart)
         {
-            order.CreatedDate = DateTime.Now;
-            order.StatusId = 1;
-
             if (ModelState.IsValid)
             {
-                _context.Add(order);
+                _context.Add(sparePart);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ClientId"] = new SelectList(_context.Client, "Id", "Name", order.ClientId);
-            ViewData["StatusId"] = new SelectList(_context.OrderStatus, "Id", "Status", order.StatusId);
-            return View(order);
+            return View(sparePart);
         }
 
-        // GET: Orders/Edit/5
+        // GET: SpareParts/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -84,24 +74,22 @@ namespace TruckRecoveryWebApplication.Controllers
                 return NotFound();
             }
 
-            var order = await _context.Orders.FindAsync(id);
-            if (order == null)
+            var sparePart = await _context.SparePart.FindAsync(id);
+            if (sparePart == null)
             {
                 return NotFound();
             }
-            ViewData["ClientId"] = new SelectList(_context.Client, "Id", "Name", order.ClientId);
-            ViewData["StatusId"] = new SelectList(_context.OrderStatus, "Id", "Status", order.StatusId);
-            return View(order);
+            return View(sparePart);
         }
 
-        // POST: Orders/Edit/5
+        // POST: SpareParts/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,CreatedDate,ClientId,OrderNumber,StatusId,TruckList,DiagnosticsDate,DiagnosticReport,Price,DiscountedPrice,DeliveryPartsDate,CloseDate,IsClosed")] Order order)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Price")] SparePart sparePart)
         {
-            if (id != order.Id)
+            if (id != sparePart.Id)
             {
                 return NotFound();
             }
@@ -110,12 +98,12 @@ namespace TruckRecoveryWebApplication.Controllers
             {
                 try
                 {
-                    _context.Update(order);
+                    _context.Update(sparePart);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!OrderExists(order.Id))
+                    if (!SparePartExists(sparePart.Id))
                     {
                         return NotFound();
                     }
@@ -126,12 +114,10 @@ namespace TruckRecoveryWebApplication.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ClientId"] = new SelectList(_context.Client, "Id", "Name", order.ClientId);
-            ViewData["StatusId"] = new SelectList(_context.OrderStatus, "Id", "Status", order.StatusId);
-            return View(order);
+            return View(sparePart);
         }
 
-        // GET: Orders/Delete/5
+        // GET: SpareParts/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -139,32 +125,30 @@ namespace TruckRecoveryWebApplication.Controllers
                 return NotFound();
             }
 
-            var order = await _context.Orders
-                .Include(o => o.Client)
-                .Include(o => o.Status)
+            var sparePart = await _context.SparePart
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (order == null)
+            if (sparePart == null)
             {
                 return NotFound();
             }
 
-            return View(order);
+            return View(sparePart);
         }
 
-        // POST: Orders/Delete/5
+        // POST: SpareParts/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var order = await _context.Orders.FindAsync(id);
-            _context.Orders.Remove(order);
+            var sparePart = await _context.SparePart.FindAsync(id);
+            _context.SparePart.Remove(sparePart);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool OrderExists(int id)
+        private bool SparePartExists(int id)
         {
-            return _context.Orders.Any(e => e.Id == id);
+            return _context.SparePart.Any(e => e.Id == id);
         }
     }
 }

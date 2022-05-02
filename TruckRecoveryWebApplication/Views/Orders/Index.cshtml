@@ -23,6 +23,9 @@
                 @Html.DisplayNameFor(model => model.OrderNumber)
             </th>
             <th>
+                @Html.DisplayNameFor(model => model.Status)
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.TruckList)
             </th>
             <th>
@@ -60,6 +63,9 @@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.OrderNumber)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Status.Status)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.TruckList)

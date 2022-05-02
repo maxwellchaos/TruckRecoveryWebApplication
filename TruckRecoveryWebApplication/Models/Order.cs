@@ -26,7 +26,8 @@ namespace WebServiceTruckRecovery.Models
         [Required]
         [Display(Name = "Клиент")]
         public int ClientId { get; set; }
-        public Client Client { get; set; }
+        [Display(Name = "Клиент")]
+        public Client? Client { get; set; }
 
         /// <summary>
         /// номер заказа
@@ -44,14 +45,17 @@ namespace WebServiceTruckRecovery.Models
    
         [Required]
         [Display(Name = "Статус заказа")]
-        public OrderStatus Status { get; set; }
+        public int StatusId { get; set; }
+        [Display(Name = "Статус заказа")]
+        public OrderStatus? Status { get; set; }
+
 
         /// <summary>
         /// список оборудования, переданного на диагностику или подлежащего ремонту
         /// </summary>
     
         [Display(Name = "Оборудование")]
-        public string? TruckList { get; set; }
+        public string TruckList { get; set; }
 
 
         /// <summary>
@@ -72,37 +76,37 @@ namespace WebServiceTruckRecovery.Models
         /// Список необходимых запчастей
         /// </summary>
         [Display(Name = "Требуемые запчасти")]
-        public List<SparePartsList> SparePartsList { get; set; }
+        public List<SparePartsList>? SparePartsList { get; set; }
 
         /// <summary>
         /// список работ по ремонту
         /// </summary>
         [Display(Name = "Требуемые работы")] 
-        public List<Repair> Repairs { get; set; }
+        public List<Repair>? Repairs { get; set; }
 
         /// <summary>
         /// Цена на работу и запчасти в сумме
         /// </summary>
         [Display(Name = "Цена")]
-        public int Price { get; set; }
+        public int Price { get; set; } = 0;
 
         /// <summary>
         /// Цена со скидкой. Рассчитывается автоматически из Скидки клиента и цены
         /// </summary>
         [Display(Name = "Цена со скидкой")]
-        public int DiscountedPrice { get; set; }
+        public int DiscountedPrice { get; set; } = 0;
 
         /// <summary>
         /// дата доставки последних запчастей
         /// </summary>
         [Display(Name = "Дата доставки всех запчастей")]
-        public DateTime DeliveryPartsDate { get; set; }
+        public DateTime? DeliveryPartsDate { get; set; }
 
         /// <summary>
         /// дата закрытия заказа
         /// </summary>
         [Display(Name = "Дата закрытия заказа")]
-        public DateTime CloseDate { get; set; }
+        public DateTime? CloseDate { get; set; }
 
         /// <summary>
         /// заявка закрыта
@@ -110,7 +114,7 @@ namespace WebServiceTruckRecovery.Models
         [Display(Name = "Заказ закрыт")]
         public bool IsClosed { get; set; }
 
-        public List<Log> Logs { get; set; }
+        public List<Log>? Logs { get; set; }
 
     }
 }
