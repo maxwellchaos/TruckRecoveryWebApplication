@@ -27,6 +27,6 @@ namespace WebServiceTruckRecovery.Models
         /// заказ в котором нужно выполнить эту работу
         /// </summary>
         public int OrderId { get; set; }
-        public Order Order { get; set; }
+        public Order? Order { get; set; }
     }
 }

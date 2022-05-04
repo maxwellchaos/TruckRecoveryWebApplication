@@ -15,7 +15,10 @@ namespace WebServiceTruckRecovery.Models
         /// </summary>
         [Required]
         [Display(Name = "Запчасть")]
-        public SparePart SparePart { get; set; }
+        public SparePart? SparePart { get; set; }
+        
+        [Display(Name = "Запчасть")] 
+        public int SparePartId { get; set; }
 
         /// <summary>
         /// количество запчастей
@@ -39,9 +42,9 @@ namespace WebServiceTruckRecovery.Models
         [Display(Name = "Дата доставки")]
         public DateTime DeliveryDate { get; set; }
 
-
+        [Display(Name = "Код заказа")]
         public int OrderId { get; set; }
-        public Order Order { get; set; }
+        public Order? Order { get; set; }
 
     }
 }

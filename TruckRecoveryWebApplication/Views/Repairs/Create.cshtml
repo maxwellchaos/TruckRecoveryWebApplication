@@ -1,0 +1,56 @@
+﻿@model WebServiceTruckRecovery.Models.Repair
+
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Create</h1>
+
+<h4>Repair</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Price" class="control-label"></label>
+                <input asp-for="Price" class="form-control" />
+                <span asp-validation-for="Price" class="text-danger"></span>
+            </div>
+            
+            <div class="form-group">
+                <label asp-for="OrderId" class="control-label"></label>
+                @if(Model!=null && Model.OrderId != 0)
+                {
+                    <input type="hidden" asp-for="OrderId" />
+                }
+                else
+                {
+                    <select asp-for="OrderId" class ="form-control" asp-items="ViewBag.OrderId"></select>
+                }
+            </div>
+
+            <div class="form-group">
+                @if(Model!=null && Model.OrderId == 0)
+                {
+                    <input type="submit" value="Создать" class="btn btn-primary" />
+                }
+                else
+                {
+                    <input type="submit" value="Добавить" class="btn btn-primary" />
+                }
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+

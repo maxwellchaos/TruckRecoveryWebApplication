@@ -92,9 +92,10 @@
                 @Html.DisplayFor(modelItem => item.IsClosed)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                <a asp-action="Edit" asp-route-id="@item.Id">Изменить</a> |
+                <a asp-action="Details" asp-route-id="@item.Id">Просмотреть</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Удалить</a>
+                <a asp-action="Diagnostics" asp-route-id="@item.Id">Провести диагностику</a>
             </td>
         </tr>
 }
