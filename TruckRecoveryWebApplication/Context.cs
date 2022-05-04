@@ -48,5 +48,6 @@ namespace TruckRecoveryWebApplication
         }
         public DbSet<WebServiceTruckRecovery.Models.SparePart> SparePart { get; set; }
         public DbSet<WebServiceTruckRecovery.Models.Repair> Repair { get; set; }
+        public DbSet<WebServiceTruckRecovery.Models.SparePartsList> SparePartsList { get; set; }
     }
 }

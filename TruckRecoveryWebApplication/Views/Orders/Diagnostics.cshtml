@@ -11,7 +11,7 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Edit">
+        <form asp-action="Diagnostics">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
             <div class="form-group">
@@ -21,7 +21,15 @@
             </div>
             <div class="form-group">
                 <label asp-for="ClientId" class="control-label"></label>
-                <select asp-for="ClientId" class="form-control" asp-items="ViewBag.ClientId" disabled="true"></select>
+                <input asp-for="ClientId" class="form-control"  hidden/>
+                @{
+                    string client = Model.Client.Name;
+                    if(Model.Client.Company.Length>1)
+                    {
+                        client += " ("+Model.Client.Company+")";
+                    }
+                }
+                <input class="form-control" value="@client "/>
                 <span asp-validation-for="ClientId" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -30,13 +38,13 @@
                 <span asp-validation-for="OrderNumber" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="StatusId" class="control-label"></label>
-                <select asp-for="StatusId" class="form-control" asp-items="ViewBag.StatusId"  disabled="true"></select>
-                <span asp-validation-for="StatusId" class="text-danger"></span>
+              
+                <input asp-for="StatusId" hidden="true"/>
+              
             </div>
             <div class="form-group">
                 <label asp-for="TruckList" class="control-label"></label>
-                <input asp-for="TruckList" class="form-control" readonly/>
+                <textarea asp-for="TruckList" class="form-control" rows=5 readonly></textarea>
                 <span asp-validation-for="TruckList" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -46,26 +54,26 @@
             </div>
             <div class="form-group">
                 <label asp-for="DiagnosticReport" class="control-label"></label>
-                <input asp-for="DiagnosticReport" class="form-control" />
+                <textarea asp-for="DiagnosticReport" class="form-control" rows=5 ></textarea>
                 <span asp-validation-for="DiagnosticReport" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Price" class="control-label"></label>
-                <input asp-for="Price" class="form-control" />
+                <input asp-for="Price" class="form-control" disabled="true" />
                 <span asp-validation-for="Price" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="DiscountedPrice" class="control-label"></label>
-                <input asp-for="DiscountedPrice" class="form-control" />
+                <input asp-for="DiscountedPrice" class="form-control" disabled="true" />
                 <span asp-validation-for="DiscountedPrice" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="DeliveryPartsDate" class="control-label"></label>
-                <input asp-for="DeliveryPartsDate" class="form-control" />
+                <input asp-for="DeliveryPartsDate" class="form-control" disabled="true" />
                 <span asp-validation-for="DeliveryPartsDate" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+                <input type="submit" value="Провести диагностику" class="btn btn-primary" />
             </div>
         </form>
     </div>
@@ -103,71 +111,53 @@
             </tbody>
         </table>
         <div class="form-group">
-            <a asp-controller="Repairs" asp-action="Create" asp-route-id="@Model.Id" class="btn btn-primary">Добавить</a>
+            <a asp-controller="Repairs" asp-action="Create" asp-route-OrderId="@Model.Id" class="btn btn-primary">Добавить работу по ремонту</a>
         </div>
     </div>
         <div class="col-md-4">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Id" />
-            <div class="form-group">
-                <label asp-for="CreatedDate" class="control-label"></label>
-                <input asp-for="CreatedDate" class="form-control" readonly/>
-                <span asp-validation-for="CreatedDate" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ClientId" class="control-label"></label>
-                <select asp-for="ClientId" class="form-control" asp-items="ViewBag.ClientId" disabled="true"></select>
-                <span asp-validation-for="ClientId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="OrderNumber" class="control-label"></label>
-                <input asp-for="OrderNumber" class="form-control" readonly/>
-                <span asp-validation-for="OrderNumber" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="StatusId" class="control-label"></label>
-                <select asp-for="StatusId" class="form-control" asp-items="ViewBag.StatusId"  disabled="true"></select>
-                <span asp-validation-for="StatusId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="TruckList" class="control-label"></label>
-                <input asp-for="TruckList" class="form-control" readonly/>
-                <span asp-validation-for="TruckList" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="DiagnosticsDate" class="control-label"></label>
-                <input asp-for="DiagnosticsDate" class="form-control" />
-                <span asp-validation-for="DiagnosticsDate" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="DiagnosticReport" class="control-label"></label>
-                <input asp-for="DiagnosticReport" class="form-control" />
-                <span asp-validation-for="DiagnosticReport" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Price" class="control-label"></label>
-                <input asp-for="Price" class="form-control" />
-                <span asp-validation-for="Price" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="DiscountedPrice" class="control-label"></label>
-                <input asp-for="DiscountedPrice" class="form-control" />
-                <span asp-validation-for="DiscountedPrice" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="DeliveryPartsDate" class="control-label"></label>
-                <input asp-for="DeliveryPartsDate" class="form-control" />
-                <span asp-validation-for="DeliveryPartsDate" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.SparePartsList[0].SparePart)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.SparePartsList[0].Count)
+                    </th>
+                    <th>
+                        
+                        @Html.DisplayNameFor(model => model.SparePartsList[0].SparePart.Price)
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+        @foreach (var item in Model.SparePartsList) {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.SparePart.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Count)
+                    </td>
+                    <td>
+                        @(item.Count*item.SparePart.Price)
+                    </td>
+                    <td>
+                        <a asp-controller="SparePartsLists" asp-action="Delete" asp-route-id="@item.Id">Удалить</a>
+                    </td>
+                </tr>
+        }
+            </tbody>
+        </table>
+         <div class="form-group">
+            <a asp-controller="SparePartsLists" asp-action="Create" asp-route-OrderId="@Model.Id" class="btn btn-primary">Добавить запчасть</a>
+        </div>
+
     </div>
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index">Назад</a>
 </div>
 

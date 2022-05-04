@@ -26,13 +26,7 @@
                 @Html.DisplayNameFor(model => model.Status)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.TruckList)
-            </th>
-            <th>
                 @Html.DisplayNameFor(model => model.DiagnosticsDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DiagnosticReport)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Price)
@@ -65,16 +59,11 @@
                 @Html.DisplayFor(modelItem => item.OrderNumber)
             </td>
             <td>
+                @item.StatusId .
                 @Html.DisplayFor(modelItem => item.Status.Status)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.TruckList)
-            </td>
-            <td>
                 @Html.DisplayFor(modelItem => item.DiagnosticsDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DiagnosticReport)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Price)
@@ -95,7 +84,10 @@
                 <a asp-action="Edit" asp-route-id="@item.Id">Изменить</a> |
                 <a asp-action="Details" asp-route-id="@item.Id">Просмотреть</a> |
                 <a asp-action="Delete" asp-route-id="@item.Id">Удалить</a>
-                <a asp-action="Diagnostics" asp-route-id="@item.Id">Провести диагностику</a>
+                    @if (item.StatusId == 1)
+                    {
+                        <a asp-action="Diagnostics" asp-route-id="@item.Id">Провести диагностику</a>
+                    }
             </td>
         </tr>
 }

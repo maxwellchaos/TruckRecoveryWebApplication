@@ -140,9 +140,41 @@ namespace TruckRecoveryWebApplication.Controllers
             }
           
             var order = await _context.Orders
-                .Include(o=>o.SparePartsList)
-                .Include(o => o.Repairs)
-                .FirstOrDefaultAsync(o=>o.Id == id);
+                .Include(order=> order.SparePartsList)
+                    .ThenInclude(spare=>spare.SparePart)
+                .Include(order => order.Repairs)
+                .Include(order => order.Client)
+                .FirstOrDefaultAsync(order => order.Id == id);
+
+            //пересчет цены и даты
+            order.Price = 0;
+          //считаю цену работ
+            foreach(Repair repair in order.Repairs)
+            {
+                
+                order.Price += repair.Price;
+            }
+
+            order.DeliveryPartsDate = DateTime.Now;
+            //цена и даты запчастей
+            foreach (SparePartsList sparePartsList in order.SparePartsList)
+            {
+                //пересчитываю дату
+                if (order.DeliveryPartsDate < sparePartsList.DeliveryDate)
+                {
+                    order.DeliveryPartsDate = sparePartsList.DeliveryDate;
+                }
+                //увелисиваю цену
+                order.Price += sparePartsList.Count*sparePartsList.SparePart.Price;
+            }
+
+            //Пересчет цены со скидкой
+            order.DiscountedPrice = order.Price-order.Price*order.Client.Discount/100;
+
+            
+
+            //Сохраняю пересчитанные данные
+            _context.Update(order);
             if (order == null)
             {
                 return NotFound();
@@ -169,6 +201,7 @@ namespace TruckRecoveryWebApplication.Controllers
             {
                 try
                 {
+                    order.StatusId = 2;
                     _context.Update(order);
                     await _context.SaveChangesAsync();
                 }

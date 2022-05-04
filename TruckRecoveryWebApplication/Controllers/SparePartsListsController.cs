@@ -11,23 +11,23 @@ using WebServiceTruckRecovery.Models;
 
 namespace TruckRecoveryWebApplication.Controllers
 {
-    public class RepairsController : Controller
+    public class SparePartsListsController : Controller
     {
         private readonly Context _context;
 
-        public RepairsController(Context context)
+        public SparePartsListsController(Context context)
         {
             _context = context;
         }
 
-        // GET: Repairs
+        // GET: SparePartsLists
         public async Task<IActionResult> Index()
         {
-            var context = _context.Repair.Include(r => r.Order);
+            var context = _context.SparePartsList.Include(s => s.Order).Include(s => s.SparePart);
             return View(await context.ToListAsync());
         }
 
-        // GET: Repairs/Details/5
+        // GET: SparePartsLists/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -35,57 +35,57 @@ namespace TruckRecoveryWebApplication.Controllers
                 return NotFound();
             }
 
-            var repair = await _context.Repair
-                .Include(r => r.Order)
+            var sparePartsList = await _context.SparePartsList
+                .Include(s => s.Order)
+                .Include(s => s.SparePart)
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (repair == null)
+            if (sparePartsList == null)
             {
                 return NotFound();
             }
 
-            return View(repair);
+            return View(sparePartsList);
         }
 
-
-
-        // GET: Repairs/Create/5
-        // или
-        // GET: Repairs/Create
+        // GET: SparePartsLists/Create
         public IActionResult Create(int? OrderId)
         {
-            if(OrderId != null)
+            if (OrderId != null)
             {
-                Repair repair = new Repair();
-                repair.OrderId = (int)OrderId;
+                //Если получили id
+                SparePartsList sparePartsList = new SparePartsList();
+                sparePartsList.OrderId = (int)OrderId;
                 ViewData["OrderId"] = new SelectList(_context.Orders, "Id", "Id");
-                return View(repair);
+                ViewData["SparePartId"] = new SelectList(_context.SparePart, "Id", "Name");
+                return View(sparePartsList);
             }
-
             ViewData["OrderId"] = new SelectList(_context.Orders, "Id", "Id");
+            ViewData["SparePartId"] = new SelectList(_context.SparePart, "Id", "Name");
             return View();
         }
 
-        // POST: Repairs/Create
+        // POST: SparePartsLists/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Name,Price,OrderId")] Repair repair)
+        public async Task<IActionResult> Create([Bind("SparePartId,Count,OnStock,DeliveryDate,OrderId")] SparePartsList sparePartsList)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(repair);
+                if (sparePartsList.DeliveryDate == null)
+                    sparePartsList.DeliveryDate = DateTime.Now;
+                _context.Add(sparePartsList);
                 await _context.SaveChangesAsync();
-                //return RedirectToAction(nameof(Index));
-
                 //перенаправляю на диагностику
-                return RedirectToAction("Diagnostics", "Orders", new { id = repair.OrderId });
+                return RedirectToAction("Diagnostics", "Orders", new { id = sparePartsList.OrderId });
             }
-            ViewData["OrderId"] = new SelectList(_context.Orders, "Id", "Id", repair.OrderId);
-            return View(repair);
+            ViewData["OrderId"] = new SelectList(_context.Orders, "Id", "Id", sparePartsList.OrderId);
+            ViewData["SparePartId"] = new SelectList(_context.SparePart, "Id", "Name", sparePartsList.SparePartId);
+            return View(sparePartsList);
         }
 
-        // GET: Repairs/Edit/5
+        // GET: SparePartsLists/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -93,23 +93,24 @@ namespace TruckRecoveryWebApplication.Controllers
                 return NotFound();
             }
 
-            var repair = await _context.Repair.FindAsync(id);
-            if (repair == null)
+            var sparePartsList = await _context.SparePartsList.FindAsync(id);
+            if (sparePartsList == null)
             {
                 return NotFound();
             }
-            ViewData["OrderId"] = new SelectList(_context.Orders, "Id", "Id", repair.OrderId);
-            return View(repair);
+            ViewData["OrderId"] = new SelectList(_context.Orders, "Id", "Id", sparePartsList.OrderId);
+            ViewData["SparePartId"] = new SelectList(_context.SparePart, "Id", "Name", sparePartsList.SparePartId);
+            return View(sparePartsList);
         }
 
-        // POST: Repairs/Edit/5
+        // POST: SparePartsLists/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Price,OrderId")] Repair repair)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,SparePartId,Count,OnStock,DeliveryDate,OrderId")] SparePartsList sparePartsList)
         {
-            if (id != repair.Id)
+            if (id != sparePartsList.Id)
             {
                 return NotFound();
             }
@@ -118,12 +119,12 @@ namespace TruckRecoveryWebApplication.Controllers
             {
                 try
                 {
-                    _context.Update(repair);
+                    _context.Update(sparePartsList);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!RepairExists(repair.Id))
+                    if (!SparePartsListExists(sparePartsList.Id))
                     {
                         return NotFound();
                     }
@@ -134,37 +135,26 @@ namespace TruckRecoveryWebApplication.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["OrderId"] = new SelectList(_context.Orders, "Id", "Id", repair.OrderId);
-            return View(repair);
+            ViewData["OrderId"] = new SelectList(_context.Orders, "Id", "Id", sparePartsList.OrderId);
+            ViewData["SparePartId"] = new SelectList(_context.SparePart, "Id", "Name", sparePartsList.SparePartId);
+            return View(sparePartsList);
         }
 
-        // GET: Repairs/Delete/5
+        // GET: SparePartsLists/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            var repairDelete = await _context.Repair.FindAsync(id);
+            var sparePartsList = await _context.SparePartsList.FindAsync(id);
             //сохраняю идентификатор перед удалением
-            int OrderId = repairDelete.OrderId;
-            _context.Repair.Remove(repairDelete);
+            int OrderId = sparePartsList.OrderId;
+            _context.SparePartsList.Remove(sparePartsList);
             await _context.SaveChangesAsync();
             //перенаправляю на диагностику
             return RedirectToAction("Diagnostics", "Orders", new { id = OrderId });
-            //return RedirectToAction(nameof(Index));
         }
 
-        // POST: Repairs/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        private bool SparePartsListExists(int id)
         {
-            var repair = await _context.Repair.FindAsync(id);
-            _context.Repair.Remove(repair);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
-
-        private bool RepairExists(int id)
-        {
-            return _context.Repair.Any(e => e.Id == id);
+            return _context.SparePartsList.Any(e => e.Id == id);
         }
     }
 }
