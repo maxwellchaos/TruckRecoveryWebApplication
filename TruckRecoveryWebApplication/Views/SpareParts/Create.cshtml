@@ -1,13 +1,11 @@
 ﻿@model WebServiceTruckRecovery.Models.SparePart
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Добавить запчасть";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Create</h1>
-
-<h4>SparePart</h4>
+<h1>Добавить запчасть</h1>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -24,13 +22,13 @@
                 <span asp-validation-for="Price" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <input type="submit" value="Добавить запчасть" class="btn btn-primary" />
             </div>
         </form>
     </div>
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index">Назад</a>
 </div>
 

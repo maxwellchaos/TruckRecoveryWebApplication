@@ -21,7 +21,7 @@ namespace WebServiceTruckRecovery.Models
         /// </summary>
         [Required]
         [Display(Name = "Стоимость")]
-        public int Price { get; set; }
+        public uint Price { get; set; }
 
         /// <summary>
         /// заказ в котором нужно выполнить эту работу

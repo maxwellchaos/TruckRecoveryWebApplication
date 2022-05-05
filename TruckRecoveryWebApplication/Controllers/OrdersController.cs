@@ -80,10 +80,15 @@ namespace TruckRecoveryWebApplication.Controllers
 
 
         // GET: Orders/Create
-        public IActionResult Create()
+        public IActionResult Create(int? ClientId)
         {
             ViewData["ClientId"] = new SelectList(_context.Client, "Id", "Name");
             ViewData["StatusId"] = new SelectList(_context.OrderStatus, "Id", "Status");
+            if (ClientId != null)
+            {
+                Order order = new Order();
+                order.ClientId = (int)ClientId;
+            }
             return View();
         }
 
@@ -199,11 +204,11 @@ namespace TruckRecoveryWebApplication.Controllers
                     order.DeliveryPartsDate = sparePartsList.DeliveryDate;
                 }
                 //увелисиваю цену
-                order.Price += sparePartsList.Count*sparePartsList.SparePart.Price;
+                order.Price += (uint)(sparePartsList.Count*sparePartsList.SparePart.Price);
             }
 
             //Пересчет цены со скидкой
-            order.DiscountedPrice = order.Price-order.Price*order.Client.Discount/100;
+            order.DiscountedPrice = (uint)(order.Price-order.Price*order.Client.Discount/100);
 
             //Сохраняю пересчитанные данные
             _context.Update(order);

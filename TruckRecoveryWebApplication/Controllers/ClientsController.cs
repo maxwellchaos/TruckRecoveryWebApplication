@@ -61,7 +61,7 @@ namespace TruckRecoveryWebApplication.Controllers
             {
                 _context.Add(client);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Create","Orders",new { ClientId = client.Id});
             }
             return View(client);
         }

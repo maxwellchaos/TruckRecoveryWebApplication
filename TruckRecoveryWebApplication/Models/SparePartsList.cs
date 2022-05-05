@@ -19,14 +19,14 @@ namespace WebServiceTruckRecovery.Models
 
         [Display(Name = "Запчасть")]
         public SparePart? SparePart { get; set; }
-        
+
 
         /// <summary>
         /// количество запчастей
         /// </summary>
         [Required]
         [Display(Name = "Требуемое количество")]
-        public int Count { get; set; }
+        public uint Count { get; set; } = 1;
 
         /// <summary>
         /// Запчасть уже на складе

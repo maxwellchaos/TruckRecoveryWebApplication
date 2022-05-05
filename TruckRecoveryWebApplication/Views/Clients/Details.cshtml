@@ -1,14 +1,13 @@
 ﻿@model WebServiceTruckRecovery.Models.Client
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Подробности о клиенте";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Details</h1>
+<h1>Подробности о клиенте</h1>
 
 <div>
-    <h4>Client</h4>
     <hr />
     <dl class="row">
         <dt class = "col-sm-2">
@@ -38,6 +37,7 @@
     </dl>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Edit" asp-route-id="@Model?.Id">Изменить</a> |
+    <a asp-action="Index">К списку клиентов</a> | 
+    <a asp-controller="Orders" asp-action="Index">К списку заказов</a>
 </div>

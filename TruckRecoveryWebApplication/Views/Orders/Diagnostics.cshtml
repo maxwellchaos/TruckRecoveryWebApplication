@@ -1,13 +1,11 @@
 ﻿@model WebServiceTruckRecovery.Models.Order
 
 @{
-    ViewData["Title"] = "Diagnostics";
+    ViewData["Title"] = "Диагностика";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Edit</h1>
-
-<h4>Order</h4>
+<h1>Диагностика</h1>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -24,7 +22,7 @@
                 <input asp-for="ClientId" class="form-control"  hidden/>
                 @{
                     string client = Model.Client.Name;
-                    if(Model.Client.Company.Length>1)
+                    if(Model.Client.Company != null)
                     {
                         client += " ("+Model.Client.Company+")";
                     }
@@ -78,6 +76,7 @@
         </form>
     </div>
     <div class="col-md-4">
+        <h4>Работы по ремонту</h4>
         <table class="table">
             <thead>
                 <tr>
@@ -111,10 +110,11 @@
             </tbody>
         </table>
         <div class="form-group">
-            <a asp-controller="Repairs" asp-action="Create" asp-route-OrderId="@Model.Id" class="btn btn-primary">Добавить работу по ремонту</a>
+            <a asp-controller="Repairs" asp-action="Create" asp-route-OrderId="@Model.Id"  class="btn btn-primary">Добавить работу по ремонту</a>
         </div>
     </div>
         <div class="col-md-4">
+            <h4>Необходимые запчасти</h4>
         <table class="table">
             <thead>
                 <tr>

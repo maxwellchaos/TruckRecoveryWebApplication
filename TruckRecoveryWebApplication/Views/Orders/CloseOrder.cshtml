@@ -1,7 +1,7 @@
 ﻿@model WebServiceTruckRecovery.Models.Order
 
 @{
-    ViewData["Title"] = "CloseOrder";
+    ViewData["Title"] = "Закрыть заказ";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -76,6 +76,6 @@
     <form asp-action="CloseOrder">
         <input type="hidden" asp-for="Id" />
         <input type="submit" value="Закрыть заказ" class="btn btn-danger" /> |
-        <a asp-action="Index">Back to List</a>
+        <a asp-action="Index">Отменить</a>
     </form>
 </div>

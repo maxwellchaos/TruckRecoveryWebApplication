@@ -1,13 +1,11 @@
 ﻿@model WebServiceTruckRecovery.Models.SparePartsList
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Добавление запчастей";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Create</h1>
-
-<h4>SparePartsList</h4>
+<h1>Добавление запчастей</h1>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -37,13 +35,13 @@
                 <select asp-for="OrderId" class ="form-control" asp-items="ViewBag.OrderId"></select>
             </div>
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <input type="submit" value="Добавить" class="btn btn-primary" />
             </div>
         </form>
     </div>
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+      <a asp-controller="Orders" asp-action="Diagnostics" asp-route-id="@Model.OrderId">Назад</a>
 </div>
 

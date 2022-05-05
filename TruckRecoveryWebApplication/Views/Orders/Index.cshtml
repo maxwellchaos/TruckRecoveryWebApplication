@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<WebServiceTruckRecovery.Models.Order>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Список заказов";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -53,7 +53,9 @@
                 @Html.DisplayFor(modelItem => item.CreatedDate)
             </td>
             <td>
+                <a asp-controller="Clients" asp-action="Details" asp-route-id="@item.ClientId">
                 @Html.DisplayFor(modelItem => item.Client.Name)
+                </a>
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.OrderNumber)
@@ -66,10 +68,16 @@
                 @Html.DisplayFor(modelItem => item.DiagnosticsDate)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Price)
+                    @if(item.Price > 10)
+                    {
+                        @Html.DisplayFor(modelItem => item.Price)
+                    }
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.DiscountedPrice)
+                    @if (item.Price > 10)
+                    {
+                        @Html.DisplayFor(modelItem => item.DiscountedPrice)
+                    }
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.DeliveryPartsDate)

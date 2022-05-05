@@ -1,13 +1,12 @@
 ﻿@model WebServiceTruckRecovery.Models.Repair
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Добавление ремонтной работы";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Create</h1>
+<h1>Добавление ремонтной работы</h1>
 
-<h4>Repair</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -25,7 +24,6 @@
             </div>
             
             <div class="form-group">
-                <label asp-for="OrderId" class="control-label"></label>
                 @if(Model!=null && Model.OrderId != 0)
                 {
                     <input type="hidden" asp-for="OrderId" />
@@ -51,6 +49,6 @@
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-controller="Orders" asp-action="Diagnostics" asp-route-id="@Model.OrderId">Назад</a>
 </div>
 

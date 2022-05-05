@@ -86,13 +86,13 @@ namespace WebServiceTruckRecovery.Models
         /// Цена на работу и запчасти в сумме
         /// </summary>
         [Display(Name = "Цена")]
-        public int Price { get; set; } = 0;
+        public uint Price { get; set; } = 1;
 
         /// <summary>
         /// Цена со скидкой. Рассчитывается автоматически из Скидки клиента и цены
         /// </summary>
         [Display(Name = "Цена со скидкой")]
-        public int DiscountedPrice { get; set; } = 0;
+        public uint DiscountedPrice { get; set; } = 1;
 
         /// <summary>
         /// дата доставки последних запчастей
