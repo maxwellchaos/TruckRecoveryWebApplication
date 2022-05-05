@@ -33,7 +33,7 @@ namespace WebServiceTruckRecovery.Models
         /// номер заказа
         /// </summary>
         // брать из бумажных документов
-        //может быть нулевым
+        // может быть нулевым
         
         [Display(Name = "Номер заказа")]
 
@@ -49,14 +49,12 @@ namespace WebServiceTruckRecovery.Models
         [Display(Name = "Статус заказа")]
         public OrderStatus? Status { get; set; }
 
-
         /// <summary>
         /// список оборудования, переданного на диагностику или подлежащего ремонту
         /// </summary>
     
         [Display(Name = "Оборудование")]
         public string TruckList { get; set; }
-
 
         /// <summary>
         /// дата проведения диагностики

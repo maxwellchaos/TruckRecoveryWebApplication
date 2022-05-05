@@ -286,6 +286,40 @@ namespace TruckRecoveryWebApplication.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+
+        // GET: Orders/CloseOrder/5
+        public async Task<IActionResult> CloseOrder(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var order = await _context.Orders
+                .Include(o => o.Client)
+                .Include(o => o.Status)
+                .FirstOrDefaultAsync(m => m.Id == id);
+            if (order == null)
+            {
+                return NotFound();
+            }
+
+            return View(order);
+        }
+
+        // POST: Orders/CloseOrder/5
+        [HttpPost, ActionName("CloseOrder")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CloseConfirmed(int id)
+        {
+            var order = await _context.Orders.FindAsync(id);
+            order.CloseDate = DateTime.Now;
+            order.StatusId = 5;
+            order.IsClosed = true;
+            _context.Update(order);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+        }
         private bool OrderExists(int id)
         {
             return _context.Orders.Any(e => e.Id == id);

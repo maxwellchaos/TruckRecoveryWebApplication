@@ -83,7 +83,7 @@
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Изменить</a> |
                 <a asp-action="Details" asp-route-id="@item.Id">Просмотреть</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Удалить</a>
+                <a asp-action="Delete" asp-route-id="@item.Id">Удалить</a> |
                     @if (item.StatusId == 1)
                     {
                         <a asp-action="Diagnostics" asp-route-id="@item.Id">Провести диагностику</a>
@@ -91,6 +91,10 @@
                     @if (item.StatusId == 3)
                     {
                         <a asp-action="FinishRepair" asp-route-OrderId="@item.Id">Завершить ремонт</a>
+                    }
+                    @if (item.StatusId == 4)
+                    {
+                        <a asp-action="CloseOrder" asp-route-id="@item.Id">Закрыть заказ</a>
                     }
             </td>
         </tr>

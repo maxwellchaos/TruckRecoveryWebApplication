@@ -1,7 +1,7 @@
 ﻿@model WebServiceTruckRecovery.Models.Order
 
 @{
-    ViewData["Title"] = "Delete";
+    ViewData["Title"] = "CloseOrder";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -71,23 +71,11 @@
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.DeliveryPartsDate)
         </dd>
-                <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.CloseDate)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.CloseDate)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.IsClosed)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.IsClosed)
-        </dd>
     </dl>
     
-    <form asp-action="Delete">
+    <form asp-action="CloseOrder">
         <input type="hidden" asp-for="Id" />
-        <input type="submit" value="Удалить" class="btn btn-danger" /> |
-        <a asp-action="Index">Вернуться к списку заказов</a>
+        <input type="submit" value="Закрыть заказ" class="btn btn-danger" /> |
+        <a asp-action="Index">Back to List</a>
     </form>
 </div>
