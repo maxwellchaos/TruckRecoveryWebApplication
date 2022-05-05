@@ -4055,6 +4055,7 @@ textarea.form-control-lg {
 }
 
 @media (min-width: 576px) {
+    body{background:red;}
   .navbar-expand-sm {
     flex-wrap: nowrap;
     justify-content: flex-start;
@@ -11219,3 +11220,9 @@ textarea.form-control-lg {
 }
 
 /*# sourceMappingURL=bootstrap.css.map */
+@media (min-width: 1000px) {
+    .col-md-4 {
+        flex: 0 0 auto;
+        width: none;
+    }
+}
