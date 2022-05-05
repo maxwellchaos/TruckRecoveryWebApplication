@@ -5,10 +5,10 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Index</h1>
+<h1>Список заказов</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create">Новый заказ</a>
 </p>
 <table class="table">
     <thead>
@@ -87,6 +87,10 @@
                     @if (item.StatusId == 1)
                     {
                         <a asp-action="Diagnostics" asp-route-id="@item.Id">Провести диагностику</a>
+                    }
+                    @if (item.StatusId == 3)
+                    {
+                        <a asp-action="FinishRepair" asp-route-OrderId="@item.Id">Завершить ремонт</a>
                     }
             </td>
         </tr>

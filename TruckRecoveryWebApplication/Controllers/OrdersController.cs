@@ -23,8 +23,20 @@ namespace TruckRecoveryWebApplication.Controllers
         // GET: Orders
         public async Task<IActionResult> Index()
         {
-            var context = _context.Orders.Include(o => o.Client).Include(o => o.Status);
-            return View(await context.ToListAsync());
+            var orders = _context.Orders.Include(o => o.Client).Include(o => o.Status);
+            //перебрать все заказы и исправить статус, если дата доставки уже прошла а статус еще "ожидает запчастей".
+            foreach(Order order in orders)
+            {
+                if(order.DeliveryPartsDate <= DateTime.Now && order.StatusId == 2)
+                {
+                    order.StatusId = 3;
+                    _context.Update(order);
+                }
+            }
+
+            //Обновляю данные в БД
+            await _context.SaveChangesAsync();
+            return View(await orders.ToListAsync());
         }
 
         // GET: Orders/Details/5
@@ -46,6 +58,26 @@ namespace TruckRecoveryWebApplication.Controllers
 
             return View(order);
         }
+
+        // GET: Orders/FinishRepair
+        public async Task<IActionResult> FinishRepair(int? OrderId)
+        {
+            if (OrderId == null)
+            {
+                return NotFound();
+            }
+            var order = await _context.Orders.FindAsync(OrderId);
+            if(order.StatusId!=3)
+            {
+                return BadRequest();
+            }
+            order.StatusId = 4;
+            _context.Update(order);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction(nameof(Index));
+        }
+
 
         // GET: Orders/Create
         public IActionResult Create()
@@ -155,6 +187,8 @@ namespace TruckRecoveryWebApplication.Controllers
                 order.Price += repair.Price;
             }
 
+            //если не будет найдено ни одной даты, то ставим сегодняшнюю дату
+            //тогда заказ автоматически переведется на стадию "Ожидание ремонта"
             order.DeliveryPartsDate = DateTime.Now;
             //цена и даты запчастей
             foreach (SparePartsList sparePartsList in order.SparePartsList)
@@ -170,8 +204,6 @@ namespace TruckRecoveryWebApplication.Controllers
 
             //Пересчет цены со скидкой
             order.DiscountedPrice = order.Price-order.Price*order.Client.Discount/100;
-
-            
 
             //Сохраняю пересчитанные данные
             _context.Update(order);
