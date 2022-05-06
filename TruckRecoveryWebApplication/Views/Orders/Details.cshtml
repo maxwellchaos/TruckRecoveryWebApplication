@@ -83,8 +83,26 @@
             @Html.DisplayFor(model => model.IsClosed)
         </dd>
     </dl>
+    
 </div>
 <div>
     <a asp-action="Edit" asp-route-id="@Model?.Id">Редактировать заказ</a> |
     <a asp-action="Index">Назад</a>
 </div>
+<br>
+<h4>История изменения заказа</h4>
+<table class="table">
+    <tbody>
+@foreach (var item in Model.Logs) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.EventDateTime)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Event)
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+

@@ -20,14 +20,8 @@
             <div class="form-group">
                 <label asp-for="ClientId" class="control-label"></label>
                 <input asp-for="ClientId" class="form-control"  hidden/>
-                @{
-                    string client = Model.Client.Name;
-                    if(Model.Client.Company != null)
-                    {
-                        client += " ("+Model.Client.Company+")";
-                    }
-                }
-                <input class="form-control" value="@client "/>
+
+                <input class="form-control" value="@(Model?.Client?.Name+Model?.Client?.Company) "/>
                 <span asp-validation-for="ClientId" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -71,6 +65,7 @@
                 <span asp-validation-for="DeliveryPartsDate" class="text-danger"></span>
             </div>
             <div class="form-group">
+                <br>
                 <input type="submit" value="Провести диагностику" class="btn btn-primary" />
             </div>
         </form>
@@ -111,7 +106,7 @@
         </table>
         <div class="form-group">
             <a asp-controller="Repairs" asp-action="Create" asp-route-OrderId="@Model.Id"  class="btn btn-primary">Добавить работу по ремонту</a>
-             <button class="add-work btn">Добавить работу по ремонту</button>
+             
         </div>
     </div>
         <div class="col-md-4">
@@ -122,14 +117,14 @@
                     <th>
                         @Html.DisplayNameFor(model => model.SparePartsList[0].SparePart)
                     </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.SparePartsList[0].Count)
-                    </th>
-                    <th>
+                      <th>
                         
                         @Html.DisplayNameFor(model => model.SparePartsList[0].SparePart.Price)
                     </th>
-                    <th></th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.SparePartsList[0].Count)
+                    </th>
+                  
                 </tr>
             </thead>
             <tbody>
@@ -138,15 +133,17 @@
                     <td>
                         @Html.DisplayFor(modelItem => item.SparePart.Name)
                     </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Count)
-                    </td>
-                    <td>
+
+                      <td>
                         @(item.Count*item.SparePart.Price)
                     </td>
+
                     <td>
+                        @Html.DisplayFor(modelItem => item.Count) 
+                        &nbsp;&nbsp;&nbsp;&nbsp;
                         <a asp-controller="SparePartsLists" asp-action="Delete" asp-route-id="@item.Id">Удалить</a>
                     </td>
+                  
                 </tr>
         }
             </tbody>

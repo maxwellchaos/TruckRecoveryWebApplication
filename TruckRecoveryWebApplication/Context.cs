@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System.Data.Entity.Infrastructure;
 using WebServiceTruckRecovery.Models;
+using TruckRecoveryWebApplication.Models;
 
 namespace TruckRecoveryWebApplication
 {
@@ -49,5 +50,6 @@ namespace TruckRecoveryWebApplication
         public DbSet<WebServiceTruckRecovery.Models.SparePart> SparePart { get; set; }
         public DbSet<WebServiceTruckRecovery.Models.Repair> Repair { get; set; }
         public DbSet<WebServiceTruckRecovery.Models.SparePartsList> SparePartsList { get; set; }
+        public DbSet<TruckRecoveryWebApplication.Models.Log> Log { get; set; }
     }
 }

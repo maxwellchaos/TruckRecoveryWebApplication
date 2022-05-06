@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using TruckRecoveryWebApplication;
+using TruckRecoveryWebApplication.Models;
 using WebServiceTruckRecovery.Models;
 
 namespace TruckRecoveryWebApplication.Controllers
@@ -75,6 +76,12 @@ namespace TruckRecoveryWebApplication.Controllers
             {
                 if (sparePartsList.DeliveryDate == null)
                     sparePartsList.DeliveryDate = DateTime.Now;
+                SparePart sparePart = await _context.SparePart.FindAsync(sparePartsList.SparePartId);
+                string spareString = "Добавлены запчасти " + sparePart.Name
+                    + " в количестве " + sparePartsList.Count.ToString() 
+                    + " с датой доставки " + sparePartsList.DeliveryDate.ToString();
+                Log.AddLog(sparePartsList.OrderId, spareString, _context);
+
                 _context.Add(sparePartsList);
                 await _context.SaveChangesAsync();
                 //перенаправляю на диагностику
@@ -143,9 +150,15 @@ namespace TruckRecoveryWebApplication.Controllers
         // GET: SparePartsLists/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            var sparePartsList = await _context.SparePartsList.FindAsync(id);
+            var sparePartsList = await _context.SparePartsList.Include(s=>s.SparePart).FirstAsync(s=>s.Id==id);
             //сохраняю идентификатор перед удалением
             int OrderId = sparePartsList.OrderId;
+
+            string spareString = "Удалены запчасти " + sparePartsList.SparePart.Name
+                   + " в количестве " + sparePartsList.Count.ToString()
+                   + " с датой доставки " + sparePartsList.DeliveryDate.ToString();
+            Log.AddLog(sparePartsList.OrderId, spareString, _context);
+
             _context.SparePartsList.Remove(sparePartsList);
             await _context.SaveChangesAsync();
             //перенаправляю на диагностику

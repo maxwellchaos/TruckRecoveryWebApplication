@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using TruckRecoveryWebApplication;
+using TruckRecoveryWebApplication.Models;
 using WebServiceTruckRecovery.Models;
 
 namespace TruckRecoveryWebApplication.Controllers
@@ -75,6 +76,8 @@ namespace TruckRecoveryWebApplication.Controllers
             if (ModelState.IsValid)
             {
                 _context.Add(repair);
+                Log.AddLog(repair.OrderId, "Добавлена работа "+repair.Name+" стоимостью "+repair.Price.ToString(), _context);
+
                 await _context.SaveChangesAsync();
                 //return RedirectToAction(nameof(Index));
 
@@ -144,7 +147,9 @@ namespace TruckRecoveryWebApplication.Controllers
             var repairDelete = await _context.Repair.FindAsync(id);
             //сохраняю идентификатор перед удалением
             int OrderId = repairDelete.OrderId;
+            Log.AddLog(OrderId, "Удалена работа " + repairDelete.Name + " стоимостью " + repairDelete.Price.ToString(), _context);
             _context.Repair.Remove(repairDelete);
+
             await _context.SaveChangesAsync();
             //перенаправляю на диагностику
             return RedirectToAction("Diagnostics", "Orders", new { id = OrderId });

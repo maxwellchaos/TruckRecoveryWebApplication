@@ -3,10 +3,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using TruckRecoveryWebApplication;
+using TruckRecoveryWebApplication.Models;
 using WebServiceTruckRecovery.Models;
 
 namespace TruckRecoveryWebApplication.Controllers
@@ -14,6 +16,7 @@ namespace TruckRecoveryWebApplication.Controllers
     public class OrdersController : Controller
     {
         private readonly Context _context;
+      
 
         public OrdersController(Context context)
         {
@@ -23,6 +26,7 @@ namespace TruckRecoveryWebApplication.Controllers
         // GET: Orders
         public async Task<IActionResult> Index()
         {
+            var newStatus = await _context.OrderStatus.FindAsync(3);
             var orders = _context.Orders.Include(o => o.Client).Include(o => o.Status);
             //перебрать все заказы и исправить статус, если дата доставки уже прошла а статус еще "ожидает запчастей".
             foreach(Order order in orders)
@@ -30,6 +34,9 @@ namespace TruckRecoveryWebApplication.Controllers
                 if(order.DeliveryPartsDate <= DateTime.Now && order.StatusId == 2)
                 {
                     order.StatusId = 3;
+                   
+                    
+                    Log.AddLog(order.Id, "Изменен статус с " + order.Status.Status + " на " + newStatus.Status, _context);
                     _context.Update(order);
                 }
             }
@@ -50,6 +57,7 @@ namespace TruckRecoveryWebApplication.Controllers
             var order = await _context.Orders
                 .Include(o => o.Client)
                 .Include(o => o.Status)
+                .Include(o => o.Logs)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (order == null)
             {
@@ -67,11 +75,13 @@ namespace TruckRecoveryWebApplication.Controllers
                 return NotFound();
             }
             var order = await _context.Orders.FindAsync(OrderId);
-            if(order.StatusId!=3)
+            if(order.StatusId != 3)
             {
                 return BadRequest();
             }
             order.StatusId = 4;
+            string Status = (await _context.OrderStatus.FirstAsync(s => s.Id == order.StatusId)).Status;
+            Log.AddLog((int)OrderId, "Изменен статус заказа на " + Status, _context);
             _context.Update(order);
             await _context.SaveChangesAsync();
 
@@ -105,6 +115,8 @@ namespace TruckRecoveryWebApplication.Controllers
             if (ModelState.IsValid)
             {
                 _context.Add(order);
+                await _context.SaveChangesAsync();
+                Log.AddLog(order.Id, "Создан заказ", _context);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
@@ -147,7 +159,43 @@ namespace TruckRecoveryWebApplication.Controllers
             {
                 try
                 {
-                    _context.Update(order);
+
+                    Order oldOrder = await _context.Orders.FirstAsync(order => order.Id == order.Id);
+
+                    if (oldOrder.ClientId != order.ClientId)
+                    {
+                        string oldClient = (await _context.Client.FindAsync(oldOrder.ClientId)).Name;
+                        string newClient = (await _context.Client.FindAsync(order.ClientId)).Name;
+                        Log.AddLog(order.Id, "Изменен клиент с " + oldClient + " на " + newClient, _context);
+                        oldOrder.ClientId = order.ClientId;
+                    }
+
+                    if (oldOrder.StatusId != order.StatusId)
+                    {
+                        string oldClient = (await _context.OrderStatus.FindAsync(oldOrder.StatusId)).Status;
+                        string newClient = (await _context.OrderStatus.FindAsync(order.StatusId)).Status;
+                        Log.AddLog(order.Id, "Изменен статус с " + oldClient + " на " + newClient, _context);
+                        oldOrder.StatusId = order.StatusId;
+                    }
+
+                    if (oldOrder.TruckList != order.TruckList)
+                    {
+                        Log.AddLog(order.Id, "Изменено оборудование с " + oldOrder.TruckList + " на " + order.TruckList, _context);
+                        oldOrder.TruckList = order.TruckList;
+                    }
+
+                    if (oldOrder.DiagnosticReport != order.DiagnosticReport)
+                    {
+                        Log.AddLog(order.Id, "Изменен отчет о диагностике с " + oldOrder.DiagnosticReport + " на " + order.DiagnosticReport, _context);
+                        oldOrder.DiagnosticReport = order.DiagnosticReport;
+                    }
+
+                    if (oldOrder.OrderNumber != order.OrderNumber)
+                    {
+                        Log.AddLog(order.Id, "Изменен номер заказа с " + oldOrder.OrderNumber + " на " + order.OrderNumber, _context);
+                        oldOrder.OrderNumber = order.OrderNumber;
+                    }
+
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
@@ -188,7 +236,6 @@ namespace TruckRecoveryWebApplication.Controllers
           //считаю цену работ
             foreach(Repair repair in order.Repairs)
             {
-                
                 order.Price += repair.Price;
             }
 
@@ -227,7 +274,7 @@ namespace TruckRecoveryWebApplication.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Diagnostics(int id, [Bind("Id,CreatedDate,ClientId,OrderNumber,StatusId,TruckList,DiagnosticsDate,DiagnosticReport,Price,DiscountedPrice,DeliveryPartsDate,CloseDate,IsClosed")] Order order)
+        public async Task<IActionResult> Diagnostics(int id, [Bind("Id,DiagnosticsDate,TruckList,DiagnosticReport,Price,DiscountedPrice,DeliveryPartsDate")] Order order)
         {
             if (id != order.Id)
             {
@@ -238,8 +285,23 @@ namespace TruckRecoveryWebApplication.Controllers
             {
                 try
                 {
-                    order.StatusId = 2;
-                    _context.Update(order);
+                    Order oldOrder = await _context.Orders.Include(o => o.Status).FirstAsync(o => o.Id == id);
+                    if (oldOrder.DiagnosticReport != order.DiagnosticReport)
+                    {
+                        Log.AddLog(order.Id, "Изменен отчет о диагностике с " + oldOrder.DiagnosticReport + " на " + order.DiagnosticReport, _context);
+                    }
+
+                    
+                    string oldClientStatus = oldOrder.Status.Status;
+                    string newClientStatus = (await _context.OrderStatus.FindAsync(2)).Status;
+                    Log.AddLog(order.Id, "Изменен статус с " + oldClientStatus + " на " + newClientStatus, _context);
+
+                    oldOrder.StatusId = 2;
+                    oldOrder.DiagnosticsDate = order.DiagnosticsDate;
+                    oldOrder.DiagnosticReport = order.DiagnosticReport;
+                    oldOrder.DiagnosticsDate = order.DiagnosticsDate;
+                    
+                    //_context.Update(order);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
@@ -318,10 +380,18 @@ namespace TruckRecoveryWebApplication.Controllers
         public async Task<IActionResult> CloseConfirmed(int id)
         {
             var order = await _context.Orders.FindAsync(id);
+
+            string oldClientStatus = (await _context.OrderStatus.FindAsync(order.StatusId)).Status;
+            string newClientStatus = (await _context.OrderStatus.FindAsync(5)).Status;
+            Log.AddLog(order.Id, "Изменен статус с " + oldClientStatus + " на " + newClientStatus, _context);
+
             order.CloseDate = DateTime.Now;
             order.StatusId = 5;
             order.IsClosed = true;
             _context.Update(order);
+
+        
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
