@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace WebServiceTruckRecovery.Models
 {
@@ -13,7 +14,11 @@ namespace WebServiceTruckRecovery.Models
         [Required]
         [Display(Name = "Логин")]
         public string Login { get; set; }
-        
+
+
+        [Display(Name = "Имя пользователя")]
+        public string? Name { get; set; }
+
         [Required]
         [Display(Name = "Пароль")]
         public string Password { get; set; }
@@ -25,7 +30,14 @@ namespace WebServiceTruckRecovery.Models
         [Required]
         [Display(Name = "Права")]
         public int RoleId { get; set; }
-        public Role Role { get; set; }
+        public Role? Role { get; set; }
+
+        /// <summary>
+        /// Это поле только для переадресации на нужную страницу сразу после ввода логина
+        /// </summary>
+        /// отсутствует в БД
+        [NotMapped]
+        public string? ReturnUrl { get; set; }
 
     }
 }

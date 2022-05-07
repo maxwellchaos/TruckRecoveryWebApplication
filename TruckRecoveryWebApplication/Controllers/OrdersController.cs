@@ -1,18 +1,14 @@
 ﻿#nullable disable
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using TruckRecoveryWebApplication;
 using TruckRecoveryWebApplication.Models;
 using WebServiceTruckRecovery.Models;
 
 namespace TruckRecoveryWebApplication.Controllers
 {
+    [Authorize(Roles = "админ")]
     public class OrdersController : Controller
     {
         private readonly Context _context;

@@ -28,6 +28,12 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="SpareParts" asp-action="Index">Запчасти</a>
                         </li>
+                        <li class="nav-item">
+                            <p class="nav-link text-dark">Подключен @User?.Identity?.Name</p>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/SystemUsers/LogOff">Войти под другим пользователем</a>
+                        </li>
                     </ul>
                 </div>
             </div>
