@@ -2,7 +2,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -12,6 +14,7 @@ using WebServiceTruckRecovery.Models;
 
 namespace TruckRecoveryWebApplication.Controllers
 {
+    [Authorize(Roles = "админ,учетчик")]
     public class SparePartsListsController : Controller
     {
         private readonly Context _context;
@@ -80,8 +83,7 @@ namespace TruckRecoveryWebApplication.Controllers
                 string spareString = "Добавлены запчасти " + sparePart.Name
                     + " в количестве " + sparePartsList.Count.ToString() 
                     + " с датой доставки " + sparePartsList.DeliveryDate.ToString();
-                Log.AddLog(sparePartsList.OrderId, spareString, _context);
-
+                Log.AddLog(sparePartsList.OrderId, spareString, _context, Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier)));
                 _context.Add(sparePartsList);
                 await _context.SaveChangesAsync();
                 //перенаправляю на диагностику
@@ -157,7 +159,7 @@ namespace TruckRecoveryWebApplication.Controllers
             string spareString = "Удалены запчасти " + sparePartsList.SparePart.Name
                    + " в количестве " + sparePartsList.Count.ToString()
                    + " с датой доставки " + sparePartsList.DeliveryDate.ToString();
-            Log.AddLog(sparePartsList.OrderId, spareString, _context);
+            Log.AddLog(sparePartsList.OrderId, spareString, _context, Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier)));
 
             _context.SparePartsList.Remove(sparePartsList);
             await _context.SaveChangesAsync();

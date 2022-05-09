@@ -3,12 +3,13 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 using TruckRecoveryWebApplication.Models;
 using WebServiceTruckRecovery.Models;
 
 namespace TruckRecoveryWebApplication.Controllers
 {
-    [Authorize(Roles = "админ")]
+    [Authorize(Roles = "админ,учетчик")]
     public class OrdersController : Controller
     {
         private readonly Context _context;
@@ -22,6 +23,7 @@ namespace TruckRecoveryWebApplication.Controllers
         // GET: Orders
         public async Task<IActionResult> Index()
         {
+
             var newStatus = await _context.OrderStatus.FindAsync(3);
             var orders = _context.Orders.Include(o => o.Client).Include(o => o.Status);
             //перебрать все заказы и исправить статус, если дата доставки уже прошла а статус еще "ожидает запчастей".
@@ -32,11 +34,12 @@ namespace TruckRecoveryWebApplication.Controllers
                     order.StatusId = 3;
                    
                     
-                    Log.AddLog(order.Id, "Изменен статус с " + order.Status.Status + " на " + newStatus.Status, _context);
+                    Log.AddLog(order.Id, "Изменен статус с " + order.Status.Status + " на " + newStatus.Status, _context, Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier)));
                     _context.Update(order);
                 }
             }
 
+            ViewBag.UserRole = User.FindFirstValue(ClaimTypes.Role);
             //Обновляю данные в БД
             await _context.SaveChangesAsync();
             return View(await orders.ToListAsync());
@@ -45,6 +48,7 @@ namespace TruckRecoveryWebApplication.Controllers
         // GET: Orders/Details/5
         public async Task<IActionResult> Details(int? id)
         {
+            ViewBag.UserRole = User.FindFirstValue(ClaimTypes.Role);
             if (id == null)
             {
                 return NotFound();
@@ -54,6 +58,7 @@ namespace TruckRecoveryWebApplication.Controllers
                 .Include(o => o.Client)
                 .Include(o => o.Status)
                 .Include(o => o.Logs)
+                    .ThenInclude(log=>log.User)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (order == null)
             {
@@ -77,7 +82,7 @@ namespace TruckRecoveryWebApplication.Controllers
             }
             order.StatusId = 4;
             string Status = (await _context.OrderStatus.FirstAsync(s => s.Id == order.StatusId)).Status;
-            Log.AddLog((int)OrderId, "Изменен статус заказа на " + Status, _context);
+            Log.AddLog((int)OrderId, "Изменен статус заказа на " + Status, _context, Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier)));
             _context.Update(order);
             await _context.SaveChangesAsync();
 
@@ -112,7 +117,7 @@ namespace TruckRecoveryWebApplication.Controllers
             {
                 _context.Add(order);
                 await _context.SaveChangesAsync();
-                Log.AddLog(order.Id, "Создан заказ", _context);
+                Log.AddLog(order.Id, "Создан заказ", _context, Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier)));
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
@@ -121,6 +126,7 @@ namespace TruckRecoveryWebApplication.Controllers
             return View(order);
         }
 
+        [Authorize(Roles = "админ")]
         // GET: Orders/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
@@ -142,6 +148,7 @@ namespace TruckRecoveryWebApplication.Controllers
         // POST: Orders/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize(Roles = "админ")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,CreatedDate,ClientId,OrderNumber,StatusId,TruckList,DiagnosticsDate,DiagnosticReport,Price,DiscountedPrice,DeliveryPartsDate,CloseDate,IsClosed")] Order order)
@@ -162,7 +169,7 @@ namespace TruckRecoveryWebApplication.Controllers
                     {
                         string oldClient = (await _context.Client.FindAsync(oldOrder.ClientId)).Name;
                         string newClient = (await _context.Client.FindAsync(order.ClientId)).Name;
-                        Log.AddLog(order.Id, "Изменен клиент с " + oldClient + " на " + newClient, _context);
+                        Log.AddLog(order.Id, "Изменен клиент с " + oldClient + " на " + newClient, _context, Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier)));
                         oldOrder.ClientId = order.ClientId;
                     }
 
@@ -170,25 +177,25 @@ namespace TruckRecoveryWebApplication.Controllers
                     {
                         string oldClient = (await _context.OrderStatus.FindAsync(oldOrder.StatusId)).Status;
                         string newClient = (await _context.OrderStatus.FindAsync(order.StatusId)).Status;
-                        Log.AddLog(order.Id, "Изменен статус с " + oldClient + " на " + newClient, _context);
+                        Log.AddLog(order.Id, "Изменен статус с " + oldClient + " на " + newClient, _context, Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier)));
                         oldOrder.StatusId = order.StatusId;
                     }
 
                     if (oldOrder.TruckList != order.TruckList)
                     {
-                        Log.AddLog(order.Id, "Изменено оборудование с " + oldOrder.TruckList + " на " + order.TruckList, _context);
+                        Log.AddLog(order.Id, "Изменено оборудование с " + oldOrder.TruckList + " на " + order.TruckList, _context, Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier)));
                         oldOrder.TruckList = order.TruckList;
                     }
 
                     if (oldOrder.DiagnosticReport != order.DiagnosticReport)
                     {
-                        Log.AddLog(order.Id, "Изменен отчет о диагностике с " + oldOrder.DiagnosticReport + " на " + order.DiagnosticReport, _context);
+                        Log.AddLog(order.Id, "Изменен отчет о диагностике с " + oldOrder.DiagnosticReport + " на " + order.DiagnosticReport, _context, Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier)));
                         oldOrder.DiagnosticReport = order.DiagnosticReport;
                     }
 
                     if (oldOrder.OrderNumber != order.OrderNumber)
                     {
-                        Log.AddLog(order.Id, "Изменен номер заказа с " + oldOrder.OrderNumber + " на " + order.OrderNumber, _context);
+                        Log.AddLog(order.Id, "Изменен номер заказа с " + oldOrder.OrderNumber + " на " + order.OrderNumber, _context, Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier)));
                         oldOrder.OrderNumber = order.OrderNumber;
                     }
 
@@ -284,18 +291,18 @@ namespace TruckRecoveryWebApplication.Controllers
                     Order oldOrder = await _context.Orders.Include(o => o.Status).FirstAsync(o => o.Id == id);
                     if (oldOrder.DiagnosticReport != order.DiagnosticReport)
                     {
-                        Log.AddLog(order.Id, "Изменен отчет о диагностике с " + oldOrder.DiagnosticReport + " на " + order.DiagnosticReport, _context);
+                        Log.AddLog(order.Id, "Изменен отчет о диагностике с " + oldOrder.DiagnosticReport + " на " + order.DiagnosticReport, _context, Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier)));
                     }
 
                     
                     string oldClientStatus = oldOrder.Status.Status;
                     string newClientStatus = (await _context.OrderStatus.FindAsync(2)).Status;
-                    Log.AddLog(order.Id, "Изменен статус с " + oldClientStatus + " на " + newClientStatus, _context);
+                    Log.AddLog(order.Id, "Изменен статус с " + oldClientStatus + " на " + newClientStatus, _context, Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier)));
 
                     oldOrder.StatusId = 2;
                     oldOrder.DiagnosticsDate = order.DiagnosticsDate;
                     oldOrder.DiagnosticReport = order.DiagnosticReport;
-                    oldOrder.DiagnosticsDate = order.DiagnosticsDate;
+                    oldOrder.DeliveryPartsDate = order.DeliveryPartsDate;
                     
                     //_context.Update(order);
                     await _context.SaveChangesAsync();
@@ -318,6 +325,7 @@ namespace TruckRecoveryWebApplication.Controllers
             return View(order);
         }
 
+        [Authorize(Roles = "админ")]
         // GET: Orders/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
@@ -338,6 +346,7 @@ namespace TruckRecoveryWebApplication.Controllers
             return View(order);
         }
 
+        [Authorize(Roles = "админ")]
         // POST: Orders/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
@@ -379,14 +388,12 @@ namespace TruckRecoveryWebApplication.Controllers
 
             string oldClientStatus = (await _context.OrderStatus.FindAsync(order.StatusId)).Status;
             string newClientStatus = (await _context.OrderStatus.FindAsync(5)).Status;
-            Log.AddLog(order.Id, "Изменен статус с " + oldClientStatus + " на " + newClientStatus, _context);
+            Log.AddLog(order.Id, "Изменен статус с " + oldClientStatus + " на " + newClientStatus, _context, Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier)));
 
             order.CloseDate = DateTime.Now;
             order.StatusId = 5;
             order.IsClosed = true;
             _context.Update(order);
-
-        
 
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));

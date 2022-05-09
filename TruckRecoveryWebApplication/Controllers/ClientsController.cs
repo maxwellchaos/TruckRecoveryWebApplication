@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -12,7 +13,7 @@ using WebServiceTruckRecovery.Models;
 
 namespace TruckRecoveryWebApplication.Controllers
 {
-    
+    [Authorize(Roles = "админ,учетчик")]
     public class ClientsController : Controller
     {
         private readonly Context _context;
@@ -25,8 +26,10 @@ namespace TruckRecoveryWebApplication.Controllers
         // GET: Clients
         public async Task<IActionResult> Index()
         {
+            ViewBag.UserRole = User.FindFirstValue(ClaimTypes.Role);
             return View(await _context.Client.ToListAsync());
         }
+
 
         // GET: Clients/Details/5
         public async Task<IActionResult> Details(int? id)
@@ -35,6 +38,9 @@ namespace TruckRecoveryWebApplication.Controllers
             {
                 return NotFound();
             }
+
+
+            ViewBag.UserRole = User.FindFirstValue(ClaimTypes.Role);
 
             var client = await _context.Client
                 .FirstOrDefaultAsync(m => m.Id == id);
@@ -49,7 +55,9 @@ namespace TruckRecoveryWebApplication.Controllers
         // GET: Clients/Create
         public IActionResult Create()
         {
-            return View();
+            Client client = new Client();
+            client.Discount = 0;
+            return View(client);
         }
 
         // POST: Clients/Create
@@ -68,6 +76,7 @@ namespace TruckRecoveryWebApplication.Controllers
             return View(client);
         }
 
+        [Authorize(Roles = "админ")]
         // GET: Clients/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
@@ -87,6 +96,7 @@ namespace TruckRecoveryWebApplication.Controllers
         // POST: Clients/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize(Roles = "админ")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Tel,Company,Discount")] Client client)
@@ -118,6 +128,7 @@ namespace TruckRecoveryWebApplication.Controllers
             }
             return View(client);
         }
+
 
         // GET: Clients/Delete/5
         public async Task<IActionResult> Delete(int? id)

@@ -86,7 +86,11 @@
     
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Редактировать заказ</a> |
+     @if(ViewBag.Role == "admin")
+    {
+        <a asp-action="Edit" asp-route-id="@Model?.Id">Редактировать заказ</a>  
+    }
+
     <a asp-action="Index">Назад</a>
 </div>
 <br>
@@ -95,12 +99,16 @@
     <tbody>
 @foreach (var item in Model.Logs) {
         <tr>
+             <td>
+                @Html.DisplayFor(modelItem => item.User.Name)
+            </td>
             <td>
                 @Html.DisplayFor(modelItem => item.EventDateTime)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Event)
-            </td>
+            </td>           
+           
         </tr>
 }
     </tbody>

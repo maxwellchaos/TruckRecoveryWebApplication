@@ -22,6 +22,20 @@ namespace TruckRecoveryWebApplication.Models
         public string Event { get; set; }
 
         /// <summary>
+        /// информация о пользователе, совершившем событие
+        /// </summary>
+        [Required]
+        [Display(Name = "Кто совершил событие")]
+        public int UserId { get; set; }
+
+        /// <summary>
+        /// информация о пользователе, совершившем событие
+        /// </summary>
+        [Display(Name = "Кто совершил событие")]
+        public SystemUser? User { get; set; }
+
+
+        /// <summary>
         /// Дата и время когда случилось событие
         /// </summary>
         [Display(Name = "Дата и время события")]
@@ -33,17 +47,20 @@ namespace TruckRecoveryWebApplication.Models
         public int OrderId { get; set; }
         public Order Order { get; set; }
 
+
         /// <summary>
         /// Добавляет событие о заказе. Не сохраняет в БД, сохранять нужно отдельно
         /// </summary>
         /// <param name="OrdrId"> ID заказа</param>
         /// <param name="Event"> Текст события, добавляемый в журнал</param>
         /// <param name="context">Контекст БД</param>
-        public static void AddLog(int OrdrId,string Event,Context context)
+        /// <param name="UserId">Идентификатор юзера, инициирующего событие</param>
+        public static void AddLog(int OrdrId, string Event, Context context, int UserId)
         {
             Log log = new Log();
             log.OrderId = OrdrId;
             log.Event = Event;
+            log.UserId = UserId;
             log.EventDateTime = DateTime.Now;
             context.Add(log);
         }

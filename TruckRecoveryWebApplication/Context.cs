@@ -37,12 +37,13 @@ namespace TruckRecoveryWebApplication
             {
                 new Role {Id = 1, Name = "клиент"},
                 new Role {Id = 2, Name = "админ"},
-                new Role {Id = 3, Name = "сотрудник отдела учета"}
+                new Role {Id = 3, Name = "учетчик"}
             });
             //первого пользователя
             modelBuilder.Entity<SystemUser>().HasData(new SystemUser[]
             {
-                new SystemUser {Id = 1, RoleId = 2, Name = "Администратор", CreatedDate = DateTime.Now, Login="admin", Password="admin"}
+                new SystemUser {Id = 1, RoleId = 2, Name = "Администратор", CreatedDate = DateTime.Now, Login="admin", Password="admin"},
+                new SystemUser {Id = 2, RoleId = 3, Name = "Сотрудник отдела учета", CreatedDate = DateTime.Now, Login="Uchet", Password="Uchet"}
             });
 
 

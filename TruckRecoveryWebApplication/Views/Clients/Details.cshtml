@@ -37,7 +37,10 @@
     </dl>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Изменить</a> |
+    @if (ViewBag.Role == "admin")
+    {
+        <a asp-action="Edit" asp-route-id="@Model?.Id">Изменить</a> @:|
+    }
     <a asp-action="Index">К списку клиентов</a> | 
     <a asp-controller="Orders" asp-action="Index">К списку заказов</a>
 </div>

@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using TruckRecoveryWebApplication;
+using TruckRecoveryWebApplication.Models;
 using WebServiceTruckRecovery.Models;
 
 namespace TruckRecoveryWebApplication.Controllers
@@ -28,6 +29,7 @@ namespace TruckRecoveryWebApplication.Controllers
             return View();
 
         }
+
 
         //доступ всем
         //Залогиниться проверить пароль
@@ -54,10 +56,12 @@ namespace TruckRecoveryWebApplication.Controllers
             //нашли - создаем клаймы с ролью доступа, именем подключившегося и id, чтобы его писать в базу
             var claims = new List<Claim>
             {
-                new Claim(ClaimTypes.Name,UserLogin.Login),
+                new Claim(ClaimTypes.Name,UserLogin.Name),
                 new Claim(ClaimTypes.Role,UserLogin.Role.Name),
                 new Claim(ClaimTypes.NameIdentifier,UserLogin.Id.ToString())
             };
+
+            
             var claimeIdentity = new ClaimsIdentity(claims, "Cookie");
             var claimePrincipal = new ClaimsPrincipal(claimeIdentity);
 
