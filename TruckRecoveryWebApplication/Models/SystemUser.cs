@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace WebServiceTruckRecovery.Models
+namespace TruckRecoveryWebApplication.Models
 {
     /// <summary>
     /// пользователь системы

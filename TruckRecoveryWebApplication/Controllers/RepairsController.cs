@@ -10,7 +10,6 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using TruckRecoveryWebApplication;
 using TruckRecoveryWebApplication.Models;
-using WebServiceTruckRecovery.Models;
 
 namespace TruckRecoveryWebApplication.Controllers
 {

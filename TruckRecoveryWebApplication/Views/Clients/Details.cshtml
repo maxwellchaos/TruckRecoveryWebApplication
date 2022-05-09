@@ -1,4 +1,4 @@
-﻿@model WebServiceTruckRecovery.Models.Client
+﻿@model TruckRecoveryWebApplication.Models.Client
 
 @{
     ViewData["Title"] = "Подробности о клиенте";
@@ -37,7 +37,7 @@
     </dl>
 </div>
 <div>
-    @if (ViewBag.UserRole == "admin")
+    @if (ViewBag.clientRole == "admin")
     {
         <a asp-action="Edit" asp-route-id="@Model?.Id">Изменить</a> @:|
     }

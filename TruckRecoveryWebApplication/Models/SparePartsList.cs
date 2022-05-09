@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace WebServiceTruckRecovery.Models
+namespace TruckRecoveryWebApplication.Models
 {
     /// <summary>
     /// список запчастей для ремонта конкретного техническоко средства

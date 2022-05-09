@@ -1,0 +1,109 @@
+﻿@model TruckRecoveryWebApplication.Models.Client
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_ClientLayout.cshtml";
+}
+
+<h1>@Html.DisplayFor(model => model.Name)</h1>
+    <hr />
+    <dl class="row">
+
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Tel)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Tel)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Company)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Company)
+        </dd>
+    @if (Model.Discount != 0)
+    {
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Discount)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Discount)
+        </dd>
+        }
+    </dl>
+
+<h1>Список заказов</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Orders[0].CreatedDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Orders[0].OrderNumber)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Orders[0].Status)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Orders[0].DiagnosticsDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Orders[0].DiscountedPrice)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Orders[0].DeliveryPartsDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Orders[0].CloseDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Orders[0].IsClosed)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model.Orders) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.CreatedDate)
+            </td>
+            <td>
+                  <a asp-action="Details" asp-route-OrderId="@item.Id"> 
+                @Html.DisplayFor(modelItem => item.OrderNumber)
+                </a>
+            </td>
+            <td>
+                @item.StatusId .
+                @Html.DisplayFor(modelItem => item.Status.Status)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DiagnosticsDate)
+            </td>
+            <td> 
+                    @if(item.Price > 10)
+                    {
+                        <s>
+                        @Html.DisplayFor(modelItem => item.Price)
+                        </s>
+                        @Html.DisplayFor(modelItem => item.DiscountedPrice)
+                    }
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DeliveryPartsDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CloseDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IsClosed)
+            </td>
+            <td>
+                <a asp-action="Details" asp-route-OrderId="@item.Id">Просмотреть</a> 
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

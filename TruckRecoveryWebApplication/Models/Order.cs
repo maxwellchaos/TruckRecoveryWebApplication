@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using TruckRecoveryWebApplication.Models;
 
-namespace WebServiceTruckRecovery.Models
+namespace TruckRecoveryWebApplication.Models
 {
     /// <summary>
     /// Заказ/заявка

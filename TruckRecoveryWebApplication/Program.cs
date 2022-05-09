@@ -33,9 +33,9 @@ builder.Services.AddAuthorization(options =>
     {
         builder.RequireClaim(ClaimTypes.Role, "uchet");
     });
-    options.AddPolicy("user", builder =>
+    options.AddPolicy("client", builder =>
     {
-        builder.RequireClaim(ClaimTypes.Role, "user");
+        builder.RequireClaim(ClaimTypes.Role, "client");
     });
 });
 

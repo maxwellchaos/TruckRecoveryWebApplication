@@ -1,8 +1,4 @@
-﻿using Microsoft.AspNetCore.Cryptography.KeyDerivation;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using System.Data.Entity.Infrastructure;
-using WebServiceTruckRecovery.Models;
+﻿using Microsoft.EntityFrameworkCore;
 using TruckRecoveryWebApplication.Models;
 
 namespace TruckRecoveryWebApplication
@@ -12,9 +8,9 @@ namespace TruckRecoveryWebApplication
         public DbSet<Order> Orders { get; set; }
         public DbSet<SystemUser> Users { get; set; }
 
-        public DbSet<WebServiceTruckRecovery.Models.Client> Client { get; set; }
+        public DbSet<TruckRecoveryWebApplication.Models.Client> Client { get; set; }
 
-        public DbSet<WebServiceTruckRecovery.Models.OrderStatus> OrderStatus { get; set; }
+        public DbSet<TruckRecoveryWebApplication.Models.OrderStatus> OrderStatus { get; set; }
 
         public Context(DbContextOptions<Context> options) : base(options)
         {
@@ -35,7 +31,7 @@ namespace TruckRecoveryWebApplication
             //роли по умолчанию
             modelBuilder.Entity<Role>().HasData(new Role[]
             {
-                new Role {Id = 1, Name = "user"},
+                new Role {Id = 1, Name = "client"},
                 new Role {Id = 2, Name = "admin"},
                 new Role {Id = 3, Name = "uchet"}
             });
@@ -64,9 +60,10 @@ namespace TruckRecoveryWebApplication
             }
         }
 
-        public DbSet<WebServiceTruckRecovery.Models.SparePart> SparePart { get; set; }
-        public DbSet<WebServiceTruckRecovery.Models.Repair> Repair { get; set; }
-        public DbSet<WebServiceTruckRecovery.Models.SparePartsList> SparePartsList { get; set; }
+        public DbSet<TruckRecoveryWebApplication.Models.SparePart> SparePart { get; set; }
+        public DbSet<TruckRecoveryWebApplication.Models.Repair> Repair { get; set; }
+        public DbSet<TruckRecoveryWebApplication.Models.SparePartsList> SparePartsList { get; set; }
         public DbSet<TruckRecoveryWebApplication.Models.Log> Log { get; set; }
+        public DbSet<TruckRecoveryWebApplication.Models.Role> Role { get; set; }
     }
 }

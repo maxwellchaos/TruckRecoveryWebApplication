@@ -1,4 +1,4 @@
-﻿@model WebServiceTruckRecovery.Models.SystemUser
+﻿@model TruckRecoveryWebApplication.Models.SystemUser
 
 @{
     ViewData["Title"] = "Вход";
@@ -13,7 +13,7 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Login" asp-controller="Clients">
+        <form asp-action="Login" asp-controller="DearClients">
             <input hidden asp-for="ReturnUrl" />
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">

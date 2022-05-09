@@ -1,4 +1,4 @@
-﻿@model WebServiceTruckRecovery.Models.SystemUser
+﻿@model TruckRecoveryWebApplication.Models.SystemUser
 
 @{
     ViewData["Title"] = "Вход";
@@ -28,6 +28,7 @@
                 <input type="submit" value="Войти" class="btn btn-primary" />
             </div>
         </form>
-        <a asp-action="Login" asp-controller="Clients" >Вход для клиентов</a>
+        
+        <a asp-action="Login" asp-controller="DearClients" >Вход для клиентов</a>
     </div>
 </div>

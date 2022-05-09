@@ -11,7 +11,6 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using TruckRecoveryWebApplication;
 using TruckRecoveryWebApplication.Models;
-using WebServiceTruckRecovery.Models;
 
 namespace TruckRecoveryWebApplication.Controllers
 {
@@ -26,6 +25,10 @@ namespace TruckRecoveryWebApplication.Controllers
         // GET: Users
         public IActionResult Login(string ReturnUrl)
         {
+            if (User.FindFirstValue(ClaimTypes.Role) == "client")
+            {
+                return RedirectToAction("Index", "DearClients");
+            }
             return View();
 
         }

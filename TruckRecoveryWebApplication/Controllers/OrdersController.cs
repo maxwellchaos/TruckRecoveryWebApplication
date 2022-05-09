@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 using TruckRecoveryWebApplication.Models;
-using WebServiceTruckRecovery.Models;
 
 namespace TruckRecoveryWebApplication.Controllers
 {
@@ -21,7 +20,7 @@ namespace TruckRecoveryWebApplication.Controllers
         }
 
         // GET: Orders
-        [Authorize(Roles = "user,admin")]
+        [Authorize(Roles = "client,uchet")]
         //[AllowAnonymous]
         public async Task<IActionResult> ClientIndex(int? ClientId)
         {

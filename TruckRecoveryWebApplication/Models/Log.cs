@@ -1,5 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using WebServiceTruckRecovery.Models;
+using TruckRecoveryWebApplication.Models;
 
 namespace TruckRecoveryWebApplication.Models
 {
