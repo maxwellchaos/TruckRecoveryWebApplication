@@ -86,9 +86,9 @@
     
 </div>
 <div>
-     @if(ViewBag.Role == "admin")
+     @if(ViewBag.UserRole == "admin")
     {
-        <a asp-action="Edit" asp-route-id="@Model?.Id">Редактировать заказ</a>  
+        <a asp-action="Edit" asp-route-id="@Model?.Id">Редактировать заказ</a>  @:|
     }
 
     <a asp-action="Index">Назад</a>

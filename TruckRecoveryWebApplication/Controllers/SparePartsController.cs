@@ -12,7 +12,7 @@ using WebServiceTruckRecovery.Models;
 
 namespace TruckRecoveryWebApplication.Controllers
 {
-    [Authorize(Roles = "админ,учетчик")]
+    [Authorize(Roles = "admin,uchet")]
     public class SparePartsController : Controller
     {
         private readonly Context _context;

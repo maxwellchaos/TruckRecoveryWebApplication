@@ -14,7 +14,7 @@ using WebServiceTruckRecovery.Models;
 
 namespace TruckRecoveryWebApplication.Controllers
 {
-    [Authorize(Roles = "админ,учетчик")]
+    [Authorize(Roles = "admin,uchet")]
     public class RepairsController : Controller
     {
         private readonly Context _context;
@@ -48,7 +48,7 @@ namespace TruckRecoveryWebApplication.Controllers
         
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "админ,учетчик")]
+        [Authorize(Roles = "admin,uchet")]
         public async Task<IActionResult> Create([Bind("Name,Price,OrderId")] Repair repair)
         {
             if (ModelState.IsValid)

@@ -15,7 +15,7 @@ using WebServiceTruckRecovery.Models;
 
 namespace TruckRecoveryWebApplication.Controllers
 {
-    [Authorize(Roles = "админ")]
+    [Authorize(Roles = "admin")]
     public class SystemUsersController : Controller
     {
         private readonly Context _context;
@@ -48,6 +48,8 @@ namespace TruckRecoveryWebApplication.Controllers
             //ищем в бд пару логин-пароль
             SystemUser UserLogin = await _context.Users.Include(u => u.Role)
                 .Where(u => u.Login == model.Login && u.Password == hash).SingleOrDefaultAsync();
+
+
             if (UserLogin == null)//не нашли
             {
                 ViewBag.Err = "Неверный логин или пароль";
@@ -62,7 +64,7 @@ namespace TruckRecoveryWebApplication.Controllers
             };
 
             
-            var claimeIdentity = new ClaimsIdentity(claims, "Cookie");
+            var claimeIdentity = new ClaimsIdentity(claims, "Cookies");
             var claimePrincipal = new ClaimsPrincipal(claimeIdentity);
 
             await HttpContext.SignInAsync("Cookies", claimePrincipal);//добавляем клаймы в шифрованные куки
@@ -81,7 +83,7 @@ namespace TruckRecoveryWebApplication.Controllers
         }
 
         //доступнео всем
-        //разлогиниться - зайти под другим юзером
+        //разлогиниться - зайти под другим userом
         // GET: Users
         [AllowAnonymous]
         public async Task<IActionResult> LogOff()

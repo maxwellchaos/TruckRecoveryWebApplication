@@ -9,16 +9,28 @@ using WebServiceTruckRecovery.Models;
 
 namespace TruckRecoveryWebApplication.Controllers
 {
-    [Authorize(Roles = "админ,учетчик")]
+    [Authorize(Roles = "admin,uchet")]
     public class OrdersController : Controller
     {
         private readonly Context _context;
-      
+
 
         public OrdersController(Context context)
         {
             _context = context;
         }
+
+        // GET: Orders
+        [Authorize(Roles = "user,admin")]
+        //[AllowAnonymous]
+        public async Task<IActionResult> ClientIndex(int? ClientId)
+        {
+            ViewBag.UserRole = User.FindFirstValue(ClaimTypes.Role);
+            var orders = _context.Orders.Include(o => o.Client).Include(o => o.Status).Where(o=>o.ClientId==ClientId);
+
+            return View(await orders.ToListAsync());
+        }
+
 
         // GET: Orders
         public async Task<IActionResult> Index()
@@ -44,7 +56,7 @@ namespace TruckRecoveryWebApplication.Controllers
             await _context.SaveChangesAsync();
             return View(await orders.ToListAsync());
         }
-
+      
         // GET: Orders/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -126,7 +138,7 @@ namespace TruckRecoveryWebApplication.Controllers
             return View(order);
         }
 
-        [Authorize(Roles = "админ")]
+        [Authorize(Roles = "admin")]
         // GET: Orders/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
@@ -148,7 +160,7 @@ namespace TruckRecoveryWebApplication.Controllers
         // POST: Orders/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [Authorize(Roles = "админ")]
+        [Authorize(Roles = "admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,CreatedDate,ClientId,OrderNumber,StatusId,TruckList,DiagnosticsDate,DiagnosticReport,Price,DiscountedPrice,DeliveryPartsDate,CloseDate,IsClosed")] Order order)
@@ -325,7 +337,7 @@ namespace TruckRecoveryWebApplication.Controllers
             return View(order);
         }
 
-        [Authorize(Roles = "админ")]
+        [Authorize(Roles = "admin")]
         // GET: Orders/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
@@ -346,7 +358,7 @@ namespace TruckRecoveryWebApplication.Controllers
             return View(order);
         }
 
-        [Authorize(Roles = "админ")]
+        [Authorize(Roles = "admin")]
         // POST: Orders/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]

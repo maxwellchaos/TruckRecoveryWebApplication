@@ -8,16 +8,13 @@
 <h1>Список заказов</h1>
 
 <p>
-    <a asp-action="Create">Новый заказ</a>
+    @ViewBag.UserRole
 </p>
 <table class="table">
     <thead>
         <tr>
             <th>
                 @Html.DisplayNameFor(model => model.CreatedDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Client)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.OrderNumber)
@@ -51,11 +48,6 @@
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.CreatedDate)
-            </td>
-            <td>
-                <a asp-controller="Clients" asp-action="Details" asp-route-id="@item.ClientId">
-                @Html.DisplayFor(modelItem => item.Client.Name)
-                </a>
             </td>
             <td>
                   <a asp-action="Details" asp-route-id="@item.Id"> 

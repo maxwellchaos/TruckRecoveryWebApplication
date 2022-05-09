@@ -35,9 +35,9 @@ namespace TruckRecoveryWebApplication
             //роли по умолчанию
             modelBuilder.Entity<Role>().HasData(new Role[]
             {
-                new Role {Id = 1, Name = "клиент"},
-                new Role {Id = 2, Name = "админ"},
-                new Role {Id = 3, Name = "учетчик"}
+                new Role {Id = 1, Name = "user"},
+                new Role {Id = 2, Name = "admin"},
+                new Role {Id = 3, Name = "uchet"}
             });
             //первого пользователя
             modelBuilder.Entity<SystemUser>().HasData(new SystemUser[]

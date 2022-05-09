@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -13,7 +14,7 @@ using WebServiceTruckRecovery.Models;
 
 namespace TruckRecoveryWebApplication.Controllers
 {
-    [Authorize(Roles = "админ,учетчик")]
+    [Authorize(Roles = "admin,uchet")]
     public class ClientsController : Controller
     {
         private readonly Context _context;
@@ -76,7 +77,7 @@ namespace TruckRecoveryWebApplication.Controllers
             return View(client);
         }
 
-        [Authorize(Roles = "админ")]
+        [Authorize(Roles = "admin")]
         // GET: Clients/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
@@ -96,7 +97,7 @@ namespace TruckRecoveryWebApplication.Controllers
         // POST: Clients/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [Authorize(Roles = "админ")]
+        [Authorize(Roles = "admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Tel,Company,Discount")] Client client)
@@ -162,6 +163,67 @@ namespace TruckRecoveryWebApplication.Controllers
         private bool ClientExists(int id)
         {
             return _context.Client.Any(e => e.Id == id);
+        }
+
+
+        [AllowAnonymous]
+        public IActionResult Login(string ReturnUrl)
+        {
+            return View();
+
+        }
+
+        //доступ всем
+        //Залогиниться проверить пароль
+
+
+        // GET: Users
+        [HttpPost]
+        [AllowAnonymous]
+
+        //логин   пароль
+        //4r6543564  тойота-4879659843	
+        //46543564  рено 123123пппп
+        //46543564  тойота-4879659843
+
+        public async Task<IActionResult> Login([Bind("Login,Password")] SystemUser model)
+        {
+            if (!ModelState.IsValid)
+            {
+                ViewBag.Err = "Неверный номер телефона или номер договора";
+                return View(model);
+            }
+
+            //найти всех клиентов с номером телефона, как во введенном логине
+            Client client = await _context.Client.Include(client => client.Orders).FirstOrDefaultAsync(client => client.Tel == model.Login);
+            if(client == null)
+            {
+                ViewBag.Err = "Неверный номер телефона или номер договора";
+                return View(model);
+            }
+            //Если нашелся клиент, то проверяем его номер договора
+            foreach (Order order in client.Orders)
+            {
+                if(order.OrderNumber == model.Password)
+                {
+
+                    //нашли - создаем клаймы с ролью доступа, именем подключившегося и id, чтобы его писать в базу
+                    var claims = new List<Claim>
+                    {
+                        new Claim(ClaimTypes.Name,client.Name),
+                        new Claim(ClaimTypes.Role,"user"),
+                    };
+
+                    var claimeIdentity = new ClaimsIdentity(claims, "Cookies");
+                    var claimePrincipal = new ClaimsPrincipal(claimeIdentity);
+
+                    await HttpContext.SignInAsync("Cookies", claimePrincipal);//добавляем клаймы в шифрованные куки
+
+                    return RedirectToAction("ClientIndex", "Orders",client.Id);
+                }
+            }
+            ViewBag.Err = "Неверный номер телефона или номер договора";
+            return View(model);
         }
     }
 }

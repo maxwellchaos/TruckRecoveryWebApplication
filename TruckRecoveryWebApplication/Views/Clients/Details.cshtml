@@ -37,7 +37,7 @@
     </dl>
 </div>
 <div>
-    @if (ViewBag.Role == "admin")
+    @if (ViewBag.UserRole == "admin")
     {
         <a asp-action="Edit" asp-route-id="@Model?.Id">Изменить</a> @:|
     }

@@ -22,20 +22,20 @@ builder.Services.AddAuthentication("Cookies")
         });
 
 
-//Это роли доступа. через клаймы
+//Это роли доступа через клаймы
 builder.Services.AddAuthorization(options =>
 {
     options.AddPolicy("admin", builder =>
     {
         builder.RequireClaim(ClaimTypes.Role, "admin");
     });
+    options.AddPolicy("uchet", builder =>
+    {
+        builder.RequireClaim(ClaimTypes.Role, "uchet");
+    });
     options.AddPolicy("user", builder =>
     {
         builder.RequireClaim(ClaimTypes.Role, "user");
-    });
-    options.AddPolicy("manager", builder =>
-    {
-        builder.RequireClaim(ClaimTypes.Role, "manager");
     });
 });
 
@@ -45,9 +45,6 @@ builder.Services.AddSession(options =>
     options.Cookie.HttpOnly = true;
     options.Cookie.IsEssential = true;
 });
-
-
-
 
 var app = builder.Build();
 
