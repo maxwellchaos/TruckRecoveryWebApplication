@@ -12,7 +12,7 @@
     <hr />
     
      <div class="unOrder">
-        <img class="startImg" src="https://cdn-icons.flaticon.com/png/512/2801/premium/2801982.png?token=exp=1652393363~hmac=38cc7391c089c1e9fc0e0bebb693fa96" alt="сломанный грузовик">
+        <img class="startImg" src="../wwwroot/images/delivery-time.png" alt="сломанный грузовик">
         <ul class="ulProgress">
             <li class="progressLi1 progressLi">Lorem ipsum dolor sit amet.</li>
             <li class="progressLi2 progressLi">Lorem ipsum dolor sit amet.</li>
@@ -21,14 +21,14 @@
             <li class="progressLi5 progressLi">Lorem ipsum dolor sit amet</li>
             <li class="progressLi6 progressLi">Lorem ipsum dolor sit amet.</li>
         </ul>
-        <img class="finishImg" src="https://cdn-icons-png.flaticon.com/512/411/411712.png" alt="отремонтированный грузовик">
+        <img class="finishImg" src="../wwwroot/images/shipped.png" alt="отремонтированный грузовик">
         <script>
         function drawMarker(index) {
                     let progressCollection = document.querySelectorAll('.progressLi');
                     console.log(progressCollection.length)
                     for (let i = 0; i < progressCollection.length; i++) {
                         if (i < index) {
-                            progressCollection[i].style.background = "url('https://cdn-icons.flaticon.com/png/512/5610/premium/5610944.png?token=exp=1652393575~hmac=e2118ccc8ea1806595d915e5d2c01f30') no-repeat 0 50%";
+                            progressCollection[i].style.background = "url(../wwwroot/images/correct2.png) no-repeat 0 50%";
 
                         } else {
                             progressCollection[i].style.background = "url('https://cdn-icons-png.flaticon.com/512/481/481078.png') no-repeat 0 50%";
