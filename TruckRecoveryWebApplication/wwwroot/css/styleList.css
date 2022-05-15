@@ -5,20 +5,31 @@
 
 .unOrder {
     min-width: 300px;
-    float:right;
+    height: 520px;
     position:absolute;
-    left:850px;
+    top:154px;
+    left:50%;
 }
 
-.ulProgress li {
+.progressLi {
+    list-style: none;
     padding-left: 24px;
-    /* Смещаем текст вправо */
-    margin-bottom: 24px;
+    margin-bottom: 30px;
     position: relative;
+    background-size: 16px 16px;
+    background-repeat: no-repeat;
+    background-position-y:center;
+}
+
+.progressLiFinished {
+     background-image: url(../img/correct2.png); 
+}
+
+.progressLiNotStarted {
+     background-image: url(../img/dry-clean3.png); 
 }
 
 .ulProgress {
-    list-style: none;
     margin: 30px;
 }
 
@@ -32,8 +43,8 @@
     position: absolute;
     left: 7px;
     width: 2px;
-    height: 14px;
-    top: 19px;
+    height: 15px;
+    top: 24px;
     background: #4BAE4F;
 }
 
@@ -46,7 +57,7 @@
     position: absolute;
     left: 7px;
     width: 2px;
-    height: 14px;
+    height: 15px;
     top: -15px;
     background: #4BAE4F;
 }
@@ -62,4 +73,20 @@
 .makeColorLineForActiveElements::before,
 .makeColorLineForActiveElements::after {
     background: #4D4D4D;
+}
+
+@media (max-width: 576px) {
+    .unOrder {
+        position: static;
+    }
+    .ulProgress {
+        padding-left: 0;
+        margin:0;
+    }
+    .finishImg{
+        margin:0;
+    }
+    .startImg{
+        margin:0;
+    }
 }

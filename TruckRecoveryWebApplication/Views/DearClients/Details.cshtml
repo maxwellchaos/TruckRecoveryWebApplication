@@ -11,37 +11,7 @@
 
     <hr />
     
-     <div class="unOrder">
-        <img class="startImg" src="../wwwroot/images/delivery-time.png" alt="сломанный грузовик">
-        <ul class="ulProgress">
-            <li class="progressLi1 progressLi">Lorem ipsum dolor sit amet.</li>
-            <li class="progressLi2 progressLi">Lorem ipsum dolor sit amet.</li>
-            <li class="progressLi3 progressLi">Lorem ipsum dolor sit amet.</li>
-            <li class="progressLi4 progressLi">Lorem ipsum dolor sit amet.</li>
-            <li class="progressLi5 progressLi">Lorem ipsum dolor sit amet</li>
-            <li class="progressLi6 progressLi">Lorem ipsum dolor sit amet.</li>
-        </ul>
-        <img class="finishImg" src="../wwwroot/images/shipped.png" alt="отремонтированный грузовик">
-        <script>
-        function drawMarker(index) {
-                    let progressCollection = document.querySelectorAll('.progressLi');
-                    console.log(progressCollection.length)
-                    for (let i = 0; i < progressCollection.length; i++) {
-                        if (i < index) {
-                            progressCollection[i].style.background = "url(../wwwroot/images/correct2.png) no-repeat 0 50%";
-
-                        } else {
-                            progressCollection[i].style.background = "url('https://cdn-icons-png.flaticon.com/512/481/481078.png') no-repeat 0 50%";
-                            progressCollection[i].classList.add('makeColorLineForActiveElements');
-                        }
-                    }
-
-                }
-
-                drawMarker(+prompt('Введите число от 1 до 5', 2));
-
-        </script>
-    </div>
+    
 
     <dl class="row">
         <dt class = "col-sm-2">
@@ -127,7 +97,39 @@
             @Html.DisplayFor(model => model.IsClosed)
         </dd>
     </dl>
-   
+    <div class="unOrder">
+        <img class="startImg" src="../img/delivery-time.png" alt="сломанный грузовик">
+        <ul class="ulProgress">
+            <li class="progressLi1 progressLi">Lorem ipsum dolor sit amet.</li>
+            <li class="progressLi2 progressLi">Lorem ipsum dolor sit amet.</li>
+            <li class="progressLi3 progressLi">Lorem ipsum dolor sit amet.</li>
+            <li class="progressLi4 progressLi">Lorem ipsum dolor sit amet.</li>
+            <li class="progressLi5 progressLi">Lorem ipsum dolor sit amet</li>
+            <li class="progressLi6 progressLi">Lorem ipsum dolor sit amet.</li>
+        </ul>
+        <img class="finishImg" src="../img/shipped.png" alt="отремонтированный грузовик">
+        <script>
+       function drawMarker(index) {
+        let progressCollection = document.querySelectorAll('.progressLi');
+
+        for (let i = 0; i < progressCollection.length; i++) {
+                if (i < index) {
+
+                    progressCollection[i].classList.add('progressLiFinished');
+
+                } else {
+
+                    progressCollection[i].classList.add('makeColorLineForActiveElements', 'progressLiNotStarted');
+
+                }
+            }
+
+        }
+
+        drawMarker(+prompt('Введите число от 1 до 5', 2));
+
+        </script>
+    </div>
 </div>
 <div>
     <a asp-action="Index">Назад</a>
