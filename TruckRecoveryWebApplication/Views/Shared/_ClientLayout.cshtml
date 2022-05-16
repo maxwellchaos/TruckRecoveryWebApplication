@@ -19,12 +19,12 @@
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
+                    <ul class="navbar-nav flex-grow-1" style="display:flex; justify-content:space-between; align-items:center; margin-left: 20px;">
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="DearClients" asp-action="Index">Мои заказы</a>
                         </li>
                         <li class="nav-item">
-                            <p class="nav-link text-dark">Клиент: @User?.Identity?.Name</p>
+                            <p class="nav-link text-dark" style="margin:0;">Клиент: @User?.Identity?.Name</p>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="/SystemUsers/LogOff">Выйти</a>
