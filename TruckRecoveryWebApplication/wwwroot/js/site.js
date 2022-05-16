@@ -25,6 +25,6 @@
 
 document.querySelector('.work-report').oninput = () => {
     console.log(document.querySelector('.work-report').value)
-    document.querySelector('.addWork').setAttribute('href', "https://localhost:7270/Repairs/Create?OrderId=" + document.querySelector('.getIdOrder').value + "&" + document.querySelector('.work-report').value);
+    document.querySelector('.addWork').setAttribute('href', "https://localhost:7270/Repairs/Create?OrderId=" + document.querySelector('.getIdOrder').value + "&text=" + document.querySelector('.work-report').value);
 }
 
