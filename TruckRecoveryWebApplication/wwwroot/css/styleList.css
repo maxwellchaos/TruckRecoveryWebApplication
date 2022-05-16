@@ -37,8 +37,7 @@
 .progressLi1::after,
 .progressLi2::after,
 .progressLi3::after,
-.progressLi4::after,
-.progressLi5::after {
+.progressLi4::after {
     content: '';
     position: absolute;
     left: 7px;
@@ -51,8 +50,7 @@
 .progressLi2::before,
 .progressLi3::before,
 .progressLi4::before,
-.progressLi5::before,
-.progressLi6::before {
+.progressLi5::before {
     content: '';
     position: absolute;
     left: 7px;
