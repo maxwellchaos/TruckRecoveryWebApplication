@@ -6,10 +6,31 @@
 }
 
 <h1>Список заказов</h1>
+<p><a asp-action="Create">Новый заказ</a></p>
+<dl class="row">
+        <dt class = "col-sm-2">
+            Заказов всего:<br> @ViewBag.OrdersCount 
+        </dt>
+    <dt class = "col-sm-2">
+            Ожидает диагностику:<br> @ViewBag.OrdersCreated
+        </dt>
+        <dt class = "col-sm-2">
+            Ожидает запчасти:<br> @ViewBag.OrdersWaiting
+        </dt>
+        <dt class = "col-sm-2">
+            На ремонте:<br> @ViewBag.OrdersRepairing
+        </dt>
+        <dt class = "col-sm-2">
+            Сдача заказов:<br> @ViewBag.OrdersRepaired
+        </dt>
+        <dt class = "col-sm-2">
+            Заказов закрыто:<br> @ViewBag.OrdersClosed
+        </dt>
+        <dt class = "col-sm-2">
+            
+        </dt>
+         </dl>
 
-<p>
-    <a asp-action="Create">Новый заказ</a>
-</p>
 <table class="table">
     <thead>
         <tr>

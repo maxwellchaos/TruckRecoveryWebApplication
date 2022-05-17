@@ -10,21 +10,12 @@
 <div>
 
     <hr />
-    
-    
-
     <dl class="row">
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.CreatedDate)
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.CreatedDate)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Client)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Client.Name)
         </dd>
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.OrderNumber)
@@ -41,8 +32,13 @@
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.TruckList)
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.TruckList)
+        <dd class = "col-sm-4">
+             <textarea asp-for="TruckList" class="form-control" rows=7 readonly></textarea>
+           
+        </dd>
+        <dd class = "col-sm-6">
+             @*Этот пустой див для нормального выравнивания*@
+           
         </dd>
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.DiagnosticsDate)
@@ -53,20 +49,29 @@
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.DiagnosticReport)
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.DiagnosticReport)
+        <dd class = "col-sm-4">
+             <textarea asp-for="DiagnosticReport" class="form-control" rows=7 readonly></textarea>
+        </dd>
+         <dd class = "col-sm-6">
+             
+           
         </dd>
         <dt class = "col-sm-2">
-            @if(Model.Price == Model.DiscountedPrice)
+            @if(Model.Price>100)
             {
-            @Html.DisplayNameFor(model => model.Price)
-            }
-            else
-            {
-            @Html.DisplayNameFor(model => model.DiscountedPrice)
+                if(Model.Price == Model.DiscountedPrice)
+                {
+                    @Html.DisplayNameFor(model => model.Price)
+                }
+                else
+                {
+                    @Html.DisplayNameFor(model => model.DiscountedPrice)
+                }
             }
         </dt>
         <dd class = "col-sm-10">
+             @if(Model.Price>100)
+            {
              @if(Model.Price == Model.DiscountedPrice)
             {
             @Html.DisplayFor(model => model.Price)
@@ -76,6 +81,7 @@
             <s> @Html.DisplayFor(model => model.Price)</s>
 
             @Html.DisplayFor(model => model.DiscountedPrice)
+            }
             }
         </dd>
         <dt class = "col-sm-2">
@@ -100,10 +106,10 @@
     <div class="unOrder">
         <img class="startImg" src="../img/delivery-time.png" alt="сломанный грузовик">
         <ul class="ulProgress">
-            <li class="progressLi1 progressLi">Ожидает диагностику</li>
-            <li class="progressLi2 progressLi">Ожидает запчасти</li>
-            <li class="progressLi3 progressLi">На ремонте</li>
-            <li class="progressLi4 progressLi">Сдача заказа</li>
+            <li class="progressLi1 progressLi">Заказ принят</li>
+            <li class="progressLi2 progressLi">Диагностика проведена</li>
+            <li class="progressLi3 progressLi">Начат ремонт</li>
+            <li class="progressLi4 progressLi">Ремонт закончен, мы ждем вас!</li>
             <li class="progressLi5 progressLi">Заказ закрыт</li>
         </ul>
         <img class="finishImg" src="../img/shipped.png" alt="отремонтированный грузовик">
@@ -125,7 +131,7 @@
 
         }
 
-        drawMarker(5);
+        drawMarker(@Model.StatusId);
 
         </script>
     </div>

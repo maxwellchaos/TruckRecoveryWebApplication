@@ -39,7 +39,8 @@
             @Html.DisplayNameFor(model => model.TruckList)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.TruckList)
+            
+            <textarea asp-for="TruckList" class="form-control" rows=7 readonly></textarea>
         </dd>
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.DiagnosticsDate)

@@ -49,7 +49,12 @@ namespace TruckRecoveryWebApplication.Controllers
                     _context.Update(order);
                 }
             }
-
+            ViewBag.OrdersCount = await _context.Orders.CountAsync();
+            ViewBag.OrdersCreated = await _context.Orders.CountAsync(order => order.StatusId == 1);
+            ViewBag.OrdersWaiting = await _context.Orders.CountAsync(order => order.StatusId == 2);
+            ViewBag.OrdersRepairing = await _context.Orders.CountAsync(order => order.StatusId == 3);
+            ViewBag.OrdersRepaired = await _context.Orders.CountAsync(order => order.StatusId == 4);
+            ViewBag.OrdersClosed = await _context.Orders.CountAsync(order => order.StatusId == 5);
             ViewBag.UserRole = User.FindFirstValue(ClaimTypes.Role);
             //Обновляю данные в БД
             await _context.SaveChangesAsync();

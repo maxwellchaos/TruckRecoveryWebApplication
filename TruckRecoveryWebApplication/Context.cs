@@ -1,4 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System.Security.Cryptography;
+using System.Text;
 using TruckRecoveryWebApplication.Models;
 
 namespace TruckRecoveryWebApplication
@@ -7,10 +9,14 @@ namespace TruckRecoveryWebApplication
     {
         public DbSet<Order> Orders { get; set; }
         public DbSet<SystemUser> Users { get; set; }
-
         public DbSet<TruckRecoveryWebApplication.Models.Client> Client { get; set; }
-
         public DbSet<TruckRecoveryWebApplication.Models.OrderStatus> OrderStatus { get; set; }
+        public DbSet<TruckRecoveryWebApplication.Models.SparePart> SparePart { get; set; }
+        public DbSet<TruckRecoveryWebApplication.Models.Repair> Repair { get; set; }
+        public DbSet<TruckRecoveryWebApplication.Models.SparePartsList> SparePartsList { get; set; }
+        public DbSet<TruckRecoveryWebApplication.Models.Log> Log { get; set; }
+        public DbSet<TruckRecoveryWebApplication.Models.Role> Role { get; set; }
+
 
         public Context(DbContextOptions<Context> options) : base(options)
         {
@@ -38,11 +44,9 @@ namespace TruckRecoveryWebApplication
             //первого пользователя
             modelBuilder.Entity<SystemUser>().HasData(new SystemUser[]
             {
-                new SystemUser {Id = 1, RoleId = 2, Name = "Администратор", CreatedDate = DateTime.Now, Login="admin", Password="admin"},
-                new SystemUser {Id = 2, RoleId = 3, Name = "Сотрудник отдела учета", CreatedDate = DateTime.Now, Login="Uchet", Password="Uchet"}
+                new SystemUser {Id = 1, RoleId = 2, Name = "Администратор", CreatedDate = DateTime.Now, Login="admin", Password=GetHashString("admin")},
+                new SystemUser {Id = 2, RoleId = 3, Name = "Сотрудник отдела учета", CreatedDate = DateTime.Now, Login="Uchet", Password=GetHashString("Uchet")}
             });
-
-
         }
 
         /// <summary>
@@ -52,18 +56,17 @@ namespace TruckRecoveryWebApplication
         /// <returns></returns>
         internal static string GetHashString(string text)
         {
-            using (var sha = new System.Security.Cryptography.SHA256Managed())
-            {
-                byte[] textData = System.Text.Encoding.UTF8.GetBytes(text);
-                byte[] hash = sha.ComputeHash(textData);
-                return BitConverter.ToString(hash).Replace("-", String.Empty);
-            }
+            //перевожу строку с паролем в массив байт
+            //Ну и добавлю немного соли ;)
+            //подробнее про соль здесь https://ru.wikipedia.org/wiki/%D0%A1%D0%BE%D0%BB%D1%8C_(%D0%BA%D1%80%D0%B8%D0%BF%D1%82%D0%BE%D0%B3%D1%80%D0%B0%D1%84%D0%B8%D1%8F)
+            var pbytes = Encoding.UTF8.GetBytes(text + "СОЛЬ");
+            
+            //хеширую этот массив байт
+            var hash = System.Security.Cryptography.SHA256.Create().ComputeHash(pbytes);
+            
+            //Преобразую массив байт в строку Base64
+            //подробнее про base64 здесь https://ru.wikipedia.org/wiki/Base64
+            return Convert.ToBase64String(hash);
         }
-
-        public DbSet<TruckRecoveryWebApplication.Models.SparePart> SparePart { get; set; }
-        public DbSet<TruckRecoveryWebApplication.Models.Repair> Repair { get; set; }
-        public DbSet<TruckRecoveryWebApplication.Models.SparePartsList> SparePartsList { get; set; }
-        public DbSet<TruckRecoveryWebApplication.Models.Log> Log { get; set; }
-        public DbSet<TruckRecoveryWebApplication.Models.Role> Role { get; set; }
     }
 }

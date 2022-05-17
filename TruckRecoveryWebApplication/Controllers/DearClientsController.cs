@@ -39,12 +39,6 @@ namespace TruckRecoveryWebApplication.Controllers
         // GET: Users
         [HttpPost]
         [AllowAnonymous]
-
-        //логин   пароль
-        //4r6543564  тойота-4879659843	
-        //46543564  рено 123123пппп
-        //46543564  тойота-4879659843
-
         public async Task<IActionResult> Login([Bind("Login,Password")] SystemUser model)
         {
             if (!ModelState.IsValid)

@@ -47,7 +47,7 @@ namespace TruckRecoveryWebApplication.Controllers
                 return View(model);
             }
             //получить хеш пароля
-            string hash = model.Password; //Context.GetHashString(model.Password);
+            string hash = Context.GetHashString(model.Password); 
             //ищем в бд пару логин-пароль
             SystemUser UserLogin = await _context.Users.Include(u => u.Role)
                 .Where(u => u.Login == model.Login && u.Password == hash).SingleOrDefaultAsync();
