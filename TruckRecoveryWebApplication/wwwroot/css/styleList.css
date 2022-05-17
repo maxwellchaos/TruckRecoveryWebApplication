@@ -1,0 +1,90 @@
+* {
+    padding: 0;
+    margin: 0;
+}
+
+.unOrder {
+    min-width: 300px;
+    height: 520px;
+    position:absolute;
+    top:154px;
+    left:50%;
+}
+
+.progressLi {
+    list-style: none;
+    padding-left: 24px;
+    margin-bottom: 30px;
+    position: relative;
+    background-size: 16px 16px;
+    background-repeat: no-repeat;
+    background-position-y:center;
+}
+
+.progressLiFinished {
+     background-image: url(../img/correct2.png); 
+}
+
+.progressLiNotStarted {
+     background-image: url(../img/dry-clean3.png); 
+}
+
+.ulProgress {
+    margin: 30px;
+}
+
+/* отрисовка линий между маркерами */
+.progressLi1::after,
+.progressLi2::after,
+.progressLi3::after,
+.progressLi4::after {
+    content: '';
+    position: absolute;
+    left: 7px;
+    width: 2px;
+    height: 15px;
+    top: 24px;
+    background: #4BAE4F;
+}
+
+.progressLi2::before,
+.progressLi3::before,
+.progressLi4::before,
+.progressLi5::before {
+    content: '';
+    position: absolute;
+    left: 7px;
+    width: 2px;
+    height: 15px;
+    top: -15px;
+    background: #4BAE4F;
+}
+
+/* стилизация картинок грузовиков */
+.startImg,
+.finishImg {
+    width: 100px;
+    margin-left: 30px;
+}
+
+/* окраска элементов */
+.makeColorLineForActiveElements::before,
+.makeColorLineForActiveElements::after {
+    background: #4D4D4D;
+}
+
+@media (max-width: 576px) {
+    .unOrder {
+        position: static;
+    }
+    .ulProgress {
+        padding-left: 0;
+        margin:0;
+    }
+    .finishImg{
+        margin:0;
+    }
+    .startImg{
+        margin:0;
+    }
+}

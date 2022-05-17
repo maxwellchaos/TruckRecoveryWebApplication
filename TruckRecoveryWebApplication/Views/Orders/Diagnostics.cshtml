@@ -11,7 +11,7 @@
     <div class="col-md-4">
         <form asp-action="Diagnostics">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="Id" class="getIdOrder" />
             <div class="form-group">
                 <label asp-for="CreatedDate" class="control-label"></label>
                 <input asp-for="CreatedDate" class="form-control" readonly/>
@@ -105,7 +105,7 @@
             </tbody>
         </table>
         <div class="form-group">
-            <a asp-controller="Repairs" asp-action="Create" asp-route-OrderId="@Model.Id"  class="btn btn-primary">Добавить работу по ремонту</a>
+            <a asp-controller="Repairs" asp-action="Create" asp-route-OrderId="@Model.Id"  class="btn btn-primary addWork">Добавить работу по ремонту</a>
              
         </div>
     </div>

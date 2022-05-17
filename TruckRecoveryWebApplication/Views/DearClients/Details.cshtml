@@ -8,7 +8,11 @@
 <h1>Подробности о заказе</h1>
 
 <div>
+
     <hr />
+    
+    
+
     <dl class="row">
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.CreatedDate)
@@ -93,9 +97,42 @@
             @Html.DisplayFor(model => model.IsClosed)
         </dd>
     </dl>
-    
+    <div class="unOrder">
+        <img class="startImg" src="../img/delivery-time.png" alt="сломанный грузовик">
+        <ul class="ulProgress">
+            <li class="progressLi1 progressLi">Ожидает диагностику</li>
+            <li class="progressLi2 progressLi">Ожидает запчасти</li>
+            <li class="progressLi3 progressLi">На ремонте</li>
+            <li class="progressLi4 progressLi">Сдача заказа</li>
+            <li class="progressLi5 progressLi">Заказ закрыт</li>
+        </ul>
+        <img class="finishImg" src="../img/shipped.png" alt="отремонтированный грузовик">
+        <script>
+       function drawMarker(index) {
+        let progressCollection = document.querySelectorAll('.progressLi');
+
+        for (let i = 0; i < progressCollection.length; i++) {
+                if (i < index) {
+
+                    progressCollection[i].classList.add('progressLiFinished');
+
+                } else {
+
+                    progressCollection[i].classList.add('makeColorLineForActiveElements', 'progressLiNotStarted');
+
+                }
+            }
+
+        }
+
+        drawMarker(5);
+
+        </script>
+    </div>
 </div>
 <div>
     <a asp-action="Index">Назад</a>
 </div>
+
 <br>
+ 
